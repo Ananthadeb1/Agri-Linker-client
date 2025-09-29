@@ -11,7 +11,6 @@ const NavBar = () => {
     const [visible, setVisible] = useState(true);
     console.log(isAdmin);
 
-
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollPos = window.pageYOffset;
@@ -31,6 +30,7 @@ const NavBar = () => {
 
     const navLinks = [
         { path: "/", label: "Home" },
+        ...(user ? [{ path: "/add-product", label: "Add Product" }] : []), // Add Product link for logged in users
         ...(isAdmin ? [{ path: "/dashboard", label: "Dashboard" }] : [])
     ];
 
@@ -67,11 +67,11 @@ const NavBar = () => {
                                 <div className="dropdown dropdown-end">
                                     <label tabIndex={0} className="cursor-pointer group">
                                         <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#FF2056] transition-colors duration-300">
-                                            {user.image ? (
-                                                <img src={user.image} alt="Profile" className="w-full h-full object-cover" />
+                                            {user.photoURL ? (
+                                                <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
                                             ) : (
                                                 <span className="text-gray-600 text-lg font-medium">
-                                                    {user.name?.charAt(0).toUpperCase() || 'U'}
+                                                    {user.displayName?.charAt(0).toUpperCase() || 'U'}
                                                 </span>
                                             )}
                                         </div>
@@ -87,6 +87,18 @@ const NavBar = () => {
                                                 }
                                             >
                                                 Profile
+                                            </NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink
+                                                to="/add-product"
+                                                className={({ isActive }) =>
+                                                    `block px-4 py-2 rounded transition-colors duration-200 ${isActive
+                                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
+                                                        : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                }
+                                            >
+                                                Add Product
                                             </NavLink>
                                         </li>
                                         <li>
