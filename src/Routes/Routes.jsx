@@ -7,7 +7,7 @@ import Signup from "../Ragistration/Signup/Signup";
 import PrivateRoute from "../Shared/PriveteRoute/privateRoute";
 import Main from "../Layout/Main";
 import AddProduct from "../Components/Pages/AddProduct/AddProduct";
-
+import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -15,7 +15,11 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home />,
+                element: <LandingPage />,
+            },
+            {
+                path: "/home",
+                element: <PrivateRoute> <Home /></PrivateRoute>,
             },
             {
                 path: "/login",

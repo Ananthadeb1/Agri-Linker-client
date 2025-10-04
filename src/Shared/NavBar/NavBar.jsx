@@ -4,7 +4,7 @@ import useAuth from "../../Hooks/useAuth";
 import useAdmin from "../../Hooks/useAdmin";
 
 const NavBar = () => {
-    const [isAdmin] = useAdmin()
+    const [isAdmin] = useAdmin();
     const { user, logout } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -28,10 +28,12 @@ const NavBar = () => {
             .catch(error => console.log(error));
     };
 
+    // Updated navLinks logic
     const navLinks = [
         { path: "/", label: "Home" },
-        ...(user ? [{ path: "/add-product", label: "Add Product" }] : []), // Add Product link for logged in users
-        ...(isAdmin ? [{ path: "/dashboard", label: "Dashboard" }] : [])
+        ...(user ? [{ path: "/home", label: "Dashboard" }] : []),
+        ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
+        ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
     ];
 
     return (
@@ -91,6 +93,18 @@ const NavBar = () => {
                                         </li>
                                         <li>
                                             <NavLink
+                                                to="/home"
+                                                className={({ isActive }) =>
+                                                    `block px-4 py-2 rounded transition-colors duration-200 ${isActive
+                                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
+                                                        : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                }
+                                            >
+                                                Dashboard
+                                            </NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink
                                                 to="/add-product"
                                                 className={({ isActive }) =>
                                                     `block px-4 py-2 rounded transition-colors duration-200 ${isActive
@@ -101,6 +115,20 @@ const NavBar = () => {
                                                 Add Product
                                             </NavLink>
                                         </li>
+                                        {isAdmin && (
+                                            <li>
+                                                <NavLink
+                                                    to="/admin-dashboard"
+                                                    className={({ isActive }) =>
+                                                        `block px-4 py-2 rounded transition-colors duration-200 ${isActive
+                                                            ? 'text-[#FF2056] bg-[#FFEAEE]'
+                                                            : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                    }
+                                                >
+                                                    Admin Dashboard
+                                                </NavLink>
+                                            </li>
+                                        )}
                                         <li>
                                             <button
                                                 onClick={handleLogOut}
@@ -184,6 +212,19 @@ const NavBar = () => {
                             >
                                 Profile
                             </NavLink>
+                            {isAdmin && (
+                                <NavLink
+                                    to="/admin-dashboard"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                        `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                                            ? 'text-[#FF2056] bg-[#FFEAEE]'
+                                            : 'text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]'}`
+                                    }
+                                >
+                                    Admin Dashboard
+                                </NavLink>
+                            )}
                             <button
                                 onClick={handleLogOut}
                                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]"
