@@ -31,7 +31,7 @@ const NavBar = () => {
     // Updated navLinks logic
     const navLinks = [
         { path: "/", label: "Home" },
-        ...(user ? [{ path: "/home", label: "Dashboard" }] : []),
+        ...(user ? [{ path: "/Products", label: "Products" }] : []),
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
         ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
     ];

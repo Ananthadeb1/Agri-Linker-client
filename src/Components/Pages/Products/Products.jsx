@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
-const Home = () => {
+const Products = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [products, setProducts] = useState([]);
@@ -19,7 +20,7 @@ const Home = () => {
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            
+
             if (user?.email) {
                 // Get recommended products for logged-in users
                 const response = await axiosSecure.get(`/api/products/recommended/${user.email}`);
@@ -41,7 +42,7 @@ const Home = () => {
     // Handle search
     const handleSearch = async (e) => {
         e.preventDefault();
-        
+
         if (!searchTerm.trim()) {
             alert("Please enter a search term");
             return;
@@ -49,10 +50,10 @@ const Home = () => {
 
         if (!user?.email) {
             // For guests, just filter locally
-            const filtered = allProducts.filter(product => 
+            const filtered = allProducts.filter(product =>
                 product.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
-            
+
             if (filtered.length > 0) {
                 setProducts(filtered);
             } else {
@@ -182,8 +183,8 @@ const Home = () => {
                             {/* Product Image */}
                             <div className="h-48 bg-gray-100">
                                 <img
-                                    src={`http://localhost:5000${product.image}`}
-                                    alt={product.name}
+                                    src={`http://localhost:5000${product.image ? product.image : 'img'}`}
+                                    alt={"no img"}
                                     className="w-full h-full object-cover"
                                     onError={(e) => {
                                         e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
@@ -210,11 +211,10 @@ const Home = () => {
                                     <p className="text-xl font-bold text-green-600">
                                         ${product.price}
                                     </p>
-                                    <span className={`px-2 py-1 text-xs font-medium rounded ${
-                                        product.status === 'available' 
-                                            ? 'bg-blue-100 text-blue-800' 
-                                            : 'bg-red-100 text-red-800'
-                                    }`}>
+                                    <span className={`px-2 py-1 text-xs font-medium rounded ${product.status === 'available'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : 'bg-red-100 text-red-800'
+                                        }`}>
                                         {product.status}
                                     </span>
                                 </div>
@@ -227,4 +227,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Products;
