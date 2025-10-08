@@ -6,8 +6,7 @@ import Login from "../Ragistration/Login/Login";
 import Signup from "../Ragistration/Signup/Signup";
 import PrivateRoute from "../Shared/PriveteRoute/privateRoute";
 import Main from "../Layout/Main";
-import AddProduct from "../Components/Pages/AddProduct/AddProduct";
-import LandingPage from "../Components/Pages/LandingPage/LandingPage";
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -28,10 +27,6 @@ export const router = createBrowserRouter([
             {
                 path: "/signup",
                 element: <Signup />,
-            },
-            {
-                path: '/add-product',
-                element: <PrivateRoute><AddProduct /></PrivateRoute> // Add this route
             }
         ],
     },

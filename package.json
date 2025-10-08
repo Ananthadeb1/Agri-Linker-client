@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^3.0.1",
+    "@mui/material": "^7.3.1",
     "@tanstack/react-query": "^5.85.5",
     "@tanstack/react-query-devtools": "^5.85.5",
     "axios": "^1.11.0",
@@ -24,7 +27,10 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
-    "react-router-dom": "^7.8.2"
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.8.2",
+    "sweetalert2": "^11.22.5",
+    "sweetalert2-react": "^0.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
