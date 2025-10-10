@@ -1,32 +1,23 @@
 /* eslint-disable no-undef */
 import { useState, useRef } from 'react';
-import { ChevronRightIcon, CameraIcon, UserIcon, CalendarIcon, ClipboardDocumentListIcon, ClockIcon, ChartBarIcon } from '@heroicons/react/24/outline';
-// import Itinerary from './Itinerary/Itinerary';
-// import ProfileTab from './ProfileTab/ProfileTab';
-// import BookingStatusTab from './BookingStatusTab/BookingStatusTab';
-// import HistoryTab from './HistoryTab/HistoryTab';
-// import ExpenseTrackingTab from './ExpenseTrackingTab/ExpenseTrackingTab';
-import { useQueryClient } from '@tanstack/react-query';
+import { ChevronRightIcon, CameraIcon, UserIcon } from '@heroicons/react/24/outline';
+// import { useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAuth from '../../../Hooks/useAuth';
 
 const UserProfile = () => {
-    const { loggedUser } = useAuth();
+    const { user, updateUserProfile, } = useAuth(); // ✅ Use auth functions
     const [activeTab, setActiveTab] = useState('Profile');
-    const [userData, setUserData] = useState(loggedUser);
+    const [userData, setUserData] = useState(user);
     const [uploading, setUploading] = useState(false);
 
     const fileInputRef = useRef(null);
     const axiosSecure = useAxiosSecure();
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
 
     const tabs = [
         { name: 'Profile', icon: UserIcon },
-        { name: 'Itinerary', icon: CalendarIcon },
-        { name: 'Booking Status', icon: ClipboardDocumentListIcon },
-        { name: 'History', icon: ClockIcon },
-        { name: 'Expense Tracking', icon: ChartBarIcon },
     ];
 
     const handleImageUpload = async (e) => {
@@ -58,73 +49,70 @@ const UserProfile = () => {
         try {
             // 1. Show temporary image immediately
             const tempUrl = URL.createObjectURL(file);
-            setUserData({ ...userData, image: tempUrl });
+            setUserData({ ...userData, photoURL: tempUrl });
 
-            // 2. Create FormData for multer
-            const formData = new FormData();
-            formData.append('image', file);
-            formData.append('userId', loggedUser._id);
+            // 2. Convert file to base64
+            const reader = new FileReader();
 
-            // 3. Upload to your backend with multer
-            const uploadResponse = await axiosSecure.post('/upload/profile-image', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            reader.onload = async () => {
+                try {
+                    const base64Image = reader.result;
+
+                    // 3. Upload via backend
+                    const uploadResponse = await axiosSecure.post('/profile/upload/imgbb', {
+                        imageData: base64Image
+                    });
+
+                    if (uploadResponse.data.success) {
+                        const imageUrl = uploadResponse.data.imageUrl;
+
+                        // ✅ UPDATED: Use AuthProvider's update function
+                        await updateUserProfile({ photoURL: imageUrl });
+
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Profile picture updated!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                } catch (error) {
+                    // Revert on error
+                    setUserData(user);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Upload failed',
+                        text: 'Try again with smaller image or different format',
+                    });
+                    console.error('Image upload failed:', error);
+                } finally {
+                    setUploading(false);
                 }
-            });
+            };
 
-            if (uploadResponse.data.success) {
-                const imageUrl = uploadResponse.data.imageUrl;
-
-                // 4. Update user profile with the new image URL
-                await handleProfileUpdate({ image: imageUrl });
-
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Profile picture updated!',
-                    showConfirmButton: false,
-                    timer: 1500
+            reader.onerror = () => {
+                setUploading(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Upload failed',
+                    text: 'Failed to read image file',
                 });
-            }
-        } catch (error) {
-            // Revert on error
-            setUserData(loggedUser);
+            };
 
+            reader.readAsDataURL(file);
+
+        } catch (error) {
+            setUploading(false);
+            console.error('Unexpected error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Upload failed',
-                text: error.response?.data?.message || error.message || 'Failed to upload image',
+                text: 'Try again with smaller image or different format',
             });
-            console.error('Image upload failed:', error);
-        } finally {
-            setUploading(false);
         }
     };
 
-    const handleProfileUpdate = async (updateData) => {
-        try {
-            const response = await axiosSecure.patch(`/users/${loggedUser._id}`, updateData);
-            if (response.data.success) {
-                const updatedUser = { ...loggedUser, ...updateData };
-                setUserData(updatedUser);
-                queryClient.setQueryData(['user', loggedUser._id], updatedUser);
-
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Profile updated successfully!',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                return true;
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Update failed',
-                text: error.response?.data?.message || error.message,
-            });
-            throw error;
-        }
-    };
+    // ✅ REMOVED: handleProfileUpdate - using updateUserProfile from AuthProvider instead
 
     const triggerFileInput = () => {
         if (!uploading) {
@@ -133,26 +121,18 @@ const UserProfile = () => {
     };
 
     const renderTabContent = () => {
-        // switch (activeTab) {
-        //     case 'Profile':
-        //         return (
-        //             <ProfileTab
-        //                 user={userData}
-        //                 onEdit={handleProfileUpdate}
-        //             />
-        //         );
-        //     case 'Itinerary':
-        //         return <Itinerary trips={[]} />;
-        //     case 'Booking Status':
-        //         return <BookingStatusTab />;
-        //     case 'History':
-        //         return <HistoryTab />;
-        //     case 'Expense Tracking':
-        //         return <ExpenseTrackingTab />;
-        //     default:
-        //         return null;
-        // }
-        return null;
+        return (
+            <div className="bg-gray-50 rounded-lg p-6">
+                <div className="text-center py-8">
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                        {activeTab} Section
+                    </h3>
+                    <p className="text-gray-500">
+                        This section is under development. Coming soon!
+                    </p>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -165,9 +145,9 @@ const UserProfile = () => {
                         <div className="flex flex-col items-center mb-8 relative group">
                             <div className="relative">
                                 <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mb-4 border-4 border-[#4BAF47] relative">
-                                    {userData?.image ? (
+                                    {user?.photoURL ? ( // ✅ Use user from auth, not userData
                                         <img
-                                            src={userData.image}
+                                            src={user.photoURL}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                             onError={(e) => {
@@ -209,11 +189,11 @@ const UserProfile = () => {
 
                             <div className="text-center">
                                 <h1 className="text-2xl font-bold text-gray-800 mb-1">
-                                    {userData?.name || 'No Name Provided'}
+                                    {user?.displayName || user?.name || 'No Name Provided'} {/* ✅ Use user from auth */}
                                 </h1>
-                                <p className="text-gray-600 text-sm">{userData?.email || 'No Email Provided'}</p>
+                                <p className="text-gray-600 text-sm">{user?.email || 'No Email Provided'}</p>
                                 <div className="mt-2 px-3 py-1 bg-[#F0F9F0] rounded-full">
-                                    <span className="text-[#4BAF47] text-xs font-medium">Active Farmer</span>
+                                    <span className="text-[#4BAF47] text-xs font-medium">Active {user?.role || 'No Role Provided'}</span>
                                 </div>
                             </div>
                         </div>
