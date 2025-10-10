@@ -104,21 +104,26 @@ const NavBar = () => {
                             </div>
                         ) : (
                             <div className="ml-6 flex items-center">
-                                <NavLink
-                                    to="/login"
-                                    className={({ isActive }) =>
-                                        `px-5 py-1.5 rounded-md font-medium transition-colors duration-300 shadow-sm ${isActive
-                                            ? 'bg-[#3A8E36] text-white'
-                                            : 'bg-[#4BAF47] text-white hover:bg-[#3A8E36]'}`
-                                    }
-                                >
-                                    Log in
-                                </NavLink>
+                                {(() => {
+                                    const isLoginActive = window.location.pathname === '/login';
+                                    const to = isLoginActive ? '/signup' : '/login';
+                                    const label = isLoginActive ? 'Sign up' : 'Log in';
+                                    return (
+                                        <NavLink
+                                            to={to}
+                                            className={({ isActive }) =>
+                                                `px-5 py-1.5 rounded-md font-medium transition-colors duration-300 shadow-sm ${isActive
+                                                    ? 'bg-[#3A8E36] text-white'
+                                                    : 'bg-[#4BAF47] text-white hover:bg-[#3A8E36]'}`
+                                            }
+                                        >
+                                            {label}
+                                        </NavLink>
+                                    );
+                                })()}
                             </div>
                         )}
                     </div>
-
-                    {/* Mobile menu button */}
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
