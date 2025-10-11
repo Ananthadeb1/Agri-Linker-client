@@ -11,6 +11,7 @@ import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
 import Cart from "../Components/Pages/Cart/Cart";
 import RatingReview from "../Components/Pages/RatingReview/RatingReview";
+import UserProfile from "../Components/Pages/userProfile/userProfile";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -47,7 +48,13 @@ export const router = createBrowserRouter([
             {
                 path: "/rating-review",
                 element: <PrivateRoute><RatingReview /></PrivateRoute>,
-            }
+            },
+             {
+                path: 'userProfile',
+                element: <PrivateRoute>
+                    <UserProfile></UserProfile>
+                </PrivateRoute>
+            },
         ],
     },
 
