@@ -10,6 +10,7 @@ import AddProduct from "../Components/Pages/AddProduct/AddProduct";
 import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
 import Cart from "../Components/Pages/Cart/Cart";
+import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 import UserProfile from "../Components/Pages/userProfile/userProfile";
 import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest"; 
 import InvestPage from "../Components/Pages/InvestPage/InvestPage"; // Add import here
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><Cart /></PrivateRoute>,
             },
             {
+                path: "/rating-review",
+                element: <PrivateRoute><RatingReview /></PrivateRoute>,
+            },
+             {
                 path: 'userProfile',
                 element: <PrivateRoute><UserProfile /></PrivateRoute>
             },
@@ -58,7 +63,11 @@ export const router = createBrowserRouter([
             {
                 path: "/invest",            // <-- Add this new route
                 element: <PrivateRoute><InvestPage /></PrivateRoute>
-            }
+            },
+                element: <PrivateRoute>
+                    <UserProfile></UserProfile>
+                </PrivateRoute>
+            },
         ],
     },
 ]);

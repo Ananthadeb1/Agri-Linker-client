@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Cart = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate(); 
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -38,6 +40,34 @@ const Cart = () => {
         } catch (error) {
             console.error("Error removing item:", error);
             alert("Failed to remove item from cart");
+        }
+    };
+
+    // ADD THIS FUNCTION FOR ORDER NOW
+    const handleOrderNow = async () => {
+        try {
+            const response = await axiosSecure.post('/api/orders/create', {
+                userId: user.email
+            });
+
+            if (response.data.success) {
+                alert('Order placed successfully!');
+                // Clear local cart state and refresh
+                setCartItems([]);
+                fetchCartItems();
+                navigate('/rating-review', { 
+                state: { 
+                    orderedProducts: response.data.order.items 
+                } 
+            });
+            } 
+        } catch (error) {
+            console.error("Order error:", error);
+            if (error.response?.data?.message) {
+                alert('Order failed: ' + error.response.data.message);
+            } else {
+                alert('Failed to place order. Please try again.');
+            }
         }
     };
 
@@ -125,8 +155,12 @@ const Cart = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold">
-                                Proceed to Checkout
+                            {/* UPDATE THIS BUTTON */}
+                            <button 
+                                onClick={handleOrderNow}
+                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold"
+                            >
+                                Order Now
                             </button>
                         </div>
                     </div>
