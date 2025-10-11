@@ -28,11 +28,13 @@ const NavBar = () => {
             .catch(error => console.log(error));
     };
 
-    // Updated navLinks logic with Cart
+    // Updated navLinks logic with Loan Request, Invest and Cart
     const navLinks = [
         { path: "/", label: "Home" },
         ...(user ? [{ path: "/products", label: "Products" }] : []),
-        ...(user ? [{ path: "/cart", label: "My Cart" }] : []), // Added Cart link
+        ...(user ? [{ path: "/loan-request", label: "Loan Request" }] : []),
+        ...(user ? [{ path: "/invest", label: "Invest" }] : []), // <--- Add this line
+        ...(user ? [{ path: "/cart", label: "My Cart" }] : []),
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
         ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
     ];
