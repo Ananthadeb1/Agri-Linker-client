@@ -11,6 +11,9 @@ import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
 import Cart from "../Components/Pages/Cart/Cart";
 import UserProfile from "../Components/Pages/userProfile/userProfile";
+import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest"; 
+import InvestPage from "../Components/Pages/InvestPage/InvestPage"; // Add import here
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -22,11 +25,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/products",
-                element: <PrivateRoute> <Products /></PrivateRoute>,
+                element: <PrivateRoute><Products /></PrivateRoute>,
             },
             {
                 path: "/admin-dashboard",
-                element: <PrivateRoute> <Dashboard /></PrivateRoute>,
+                element: <PrivateRoute><Dashboard /></PrivateRoute>,
             },
             {
                 path: "/login",
@@ -38,21 +41,24 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/add-product',
-                element: <PrivateRoute><AddProduct /></PrivateRoute> // Add this route
+                element: <PrivateRoute><AddProduct /></PrivateRoute>
             },
             {
-                path: "/cart", // Add this route
-                element: <PrivateRoute> <Cart /></PrivateRoute>,
+                path: "/cart",
+                element: <PrivateRoute><Cart /></PrivateRoute>,
             },
             {
                 path: 'userProfile',
-                element: <PrivateRoute>
-                    <UserProfile></UserProfile>
-                </PrivateRoute>
+                element: <PrivateRoute><UserProfile /></PrivateRoute>
+            },
+            {
+                path: "/loan-request",
+                element: <PrivateRoute><LoanRequest /></PrivateRoute>
+            },
+            {
+                path: "/invest",            // <-- Add this new route
+                element: <PrivateRoute><InvestPage /></PrivateRoute>
             }
         ],
     },
-
 ]);
-
-
