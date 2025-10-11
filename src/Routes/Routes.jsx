@@ -10,6 +10,7 @@ import AddProduct from "../Components/Pages/AddProduct/AddProduct";
 import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
 import Cart from "../Components/Pages/Cart/Cart";
+import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
             {
                 path: "/cart", // Add this route
                 element: <PrivateRoute> <Cart /></PrivateRoute>,
+            },
+            {
+                path: "/rating-review",
+                element: <PrivateRoute><RatingReview /></PrivateRoute>,
             }
         ],
     },

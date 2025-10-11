@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Cart = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate(); 
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -53,9 +55,12 @@ const Cart = () => {
                 // Clear local cart state and refresh
                 setCartItems([]);
                 fetchCartItems();
-            } else {
-                alert('Failed to place order: ' + response.data.message);
-            }
+                navigate('/rating-review', { 
+                state: { 
+                    orderedProducts: response.data.order.items 
+                } 
+            });
+            } 
         } catch (error) {
             console.error("Order error:", error);
             if (error.response?.data?.message) {
