@@ -41,6 +41,31 @@ const Cart = () => {
         }
     };
 
+    // ADD THIS FUNCTION FOR ORDER NOW
+    const handleOrderNow = async () => {
+        try {
+            const response = await axiosSecure.post('/api/orders/create', {
+                userId: user.email
+            });
+
+            if (response.data.success) {
+                alert('Order placed successfully!');
+                // Clear local cart state and refresh
+                setCartItems([]);
+                fetchCartItems();
+            } else {
+                alert('Failed to place order: ' + response.data.message);
+            }
+        } catch (error) {
+            console.error("Order error:", error);
+            if (error.response?.data?.message) {
+                alert('Order failed: ' + error.response.data.message);
+            } else {
+                alert('Failed to place order. Please try again.');
+            }
+        }
+    };
+
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.orderedQuantity), 0);
     };
@@ -125,8 +150,12 @@ const Cart = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold">
-                                Proceed to Checkout
+                            {/* UPDATE THIS BUTTON */}
+                            <button 
+                                onClick={handleOrderNow}
+                                className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold"
+                            >
+                                Order Now
                             </button>
                         </div>
                     </div>
