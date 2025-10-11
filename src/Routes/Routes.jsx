@@ -9,6 +9,7 @@ import Main from "../Layout/Main";
 import AddProduct from "../Components/Pages/AddProduct/AddProduct";
 import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
+import Cart from "../Components/Pages/Cart/Cart";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
             {
                 path: '/add-product',
                 element: <PrivateRoute><AddProduct /></PrivateRoute> // Add this route
+            },
+            {
+                path: "/cart", // Add this route
+                element: <PrivateRoute> <Cart /></PrivateRoute>,
             }
         ],
     },
