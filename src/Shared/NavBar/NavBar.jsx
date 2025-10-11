@@ -28,10 +28,11 @@ const NavBar = () => {
             .catch(error => console.log(error));
     };
 
-    // Updated navLinks logic
+    // Updated navLinks logic with Cart
     const navLinks = [
         { path: "/", label: "Home" },
-        ...(user ? [{ path: "/Products", label: "Products" }] : []),
+        ...(user ? [{ path: "/products", label: "Products" }] : []),
+        ...(user ? [{ path: "/cart", label: "My Cart" }] : []), // Added Cart link
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
         ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
     ];
@@ -89,6 +90,18 @@ const NavBar = () => {
                                                 }
                                             >
                                                 Profile
+                                            </NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink
+                                                to="/cart"
+                                                className={({ isActive }) =>
+                                                    `block px-4 py-2 rounded transition-colors duration-200 ${isActive
+                                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                                        : 'text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47]'}`
+                                                }
+                                            >
+                                                My Cart
                                             </NavLink>
                                         </li>
                                         <li>
@@ -178,6 +191,17 @@ const NavBar = () => {
                                 }
                             >
                                 Profile
+                            </NavLink>
+                            <NavLink
+                                to="/cart"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={({ isActive }) =>
+                                    `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                        : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
+                                }
+                            >
+                                My Cart
                             </NavLink>
                             <button
                                 onClick={handleLogOut}
