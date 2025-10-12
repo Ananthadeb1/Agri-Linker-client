@@ -5,6 +5,8 @@ import { ChevronRightIcon, CameraIcon, UserIcon } from '@heroicons/react/24/outl
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
+import ProfileInfo from './ProfileInfo/profileInfo';
+ 
 
 const UserProfile = () => {
     const { user, updateUserProfile, } = useAuth(); // ✅ Use auth functions
@@ -124,12 +126,7 @@ const UserProfile = () => {
         return (
             <div className="bg-gray-50 rounded-lg p-6">
                 <div className="text-center py-8">
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                        {activeTab} Section
-                    </h3>
-                    <p className="text-gray-500">
-                        This section is under development. Coming soon!
-                    </p>
+                  <ProfileInfo />
                 </div>
             </div>
         );
