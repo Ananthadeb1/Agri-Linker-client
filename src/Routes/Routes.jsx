@@ -14,6 +14,7 @@ import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 import UserProfile from "../Components/Pages/userProfile/userProfile";
 import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest";
 import InvestPage from "../Components/Pages/InvestPage/InvestPage"; // Add import here
+import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
 
 export const router = createBrowserRouter([
     {
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
                     <UserProfile></UserProfile>
                 </PrivateRoute>
             },
+            {
+                path: "/crop-recommendation",
+                element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
+            }
         ],
     },
 ]);
