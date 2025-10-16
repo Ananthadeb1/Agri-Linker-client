@@ -33,26 +33,7 @@ const MyProducts = () => {
         }
     };
 
-    const handleDeleteProduct = async (productId) => {
-        if (!window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
-            return;
-        }
 
-        try {
-            setDeleting(productId);
-            const response = await axiosSecure.delete(`/api/products/${productId}`);
-
-            if (response.data.success) {
-                alert('Product deleted successfully!');
-                setProducts(prev => prev.filter(product => product._id !== productId));
-            }
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            alert('Failed to delete product');
-        } finally {
-            setDeleting(null);
-        }
-    };
 
     const handleAddProduct = () => {
         navigate('/add-product');
