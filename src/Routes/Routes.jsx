@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><RatingReview /></PrivateRoute>,
             },
             {
-                path: 'userProfile',
+                path: '/userProfile',
                 element: <PrivateRoute><UserProfile /></PrivateRoute>
             },
             {
@@ -65,12 +65,6 @@ export const router = createBrowserRouter([
             {
                 path: "/invest",            // <-- Add this new route
                 element: <PrivateRoute><InvestPage /></PrivateRoute>
-            },
-            {
-                path: '/userProfile',
-                element: <PrivateRoute>
-                    <UserProfile></UserProfile>
-                </PrivateRoute>
             },
             {
                 path: "/crop-recommendation",

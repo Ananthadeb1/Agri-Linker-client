@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import Payment from "./Payment"; // Import the Payment component
 
 const Cart = () => {
     const { user } = useAuth();
@@ -9,6 +10,7 @@ const Cart = () => {
     const navigate = useNavigate(); 
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showPayment, setShowPayment] = useState(false); // Add state for payment modal
 
     useEffect(() => {
         if (user?.email) {
@@ -43,32 +45,32 @@ const Cart = () => {
         }
     };
 
-    // ADD THIS FUNCTION FOR ORDER NOW
-    const handleOrderNow = async () => {
-        try {
-            const response = await axiosSecure.post('/api/orders/create', {
-                userId: user.email
-            });
-
-            if (response.data.success) {
-                alert('Order placed successfully!');
-                // Clear local cart state and refresh
-                setCartItems([]);
-                fetchCartItems();
-                navigate('/rating-review', { 
-                state: { 
-                    orderedProducts: response.data.order.items 
-                } 
-            });
-            } 
-        } catch (error) {
-            console.error("Order error:", error);
-            if (error.response?.data?.message) {
-                alert('Order failed: ' + error.response.data.message);
-            } else {
-                alert('Failed to place order. Please try again.');
-            }
+    // Updated handleOrderNow to show payment interface
+    const handleOrderNow = () => {
+        if (cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
         }
+        setShowPayment(true);
+    };
+
+    // Handle successful payment
+    const handlePaymentSuccess = (order) => {
+        setShowPayment(false);
+        setCartItems([]);
+        fetchCartItems();
+        
+        // Navigate to rating and review page
+        navigate('/rating-review', { 
+            state: { 
+                orderedProducts: order.items 
+            } 
+        });
+    };
+
+    // Handle payment close
+    const handlePaymentClose = () => {
+        setShowPayment(false);
     };
 
     const calculateTotal = () => {
@@ -106,7 +108,7 @@ const Cart = () => {
                                             <img
                                                 src={`http://localhost:5000${item.image}`}
                                                 alt={item.productName}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-20 object-cover"
                                                 onError={(e) => {
                                                     e.target.src = 'https://via.placeholder.com/80x80?text=No+Image';
                                                 }}
@@ -155,7 +157,6 @@ const Cart = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* UPDATE THIS BUTTON */}
                             <button 
                                 onClick={handleOrderNow}
                                 className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold"
@@ -165,6 +166,17 @@ const Cart = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Payment Modal */}
+            {showPayment && (
+                <Payment
+                    cartItems={cartItems}
+                    totalAmount={calculateTotal()}
+                    userId={user.email}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onClose={handlePaymentClose}
+                />
             )}
         </div>
     );

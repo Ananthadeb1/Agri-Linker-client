@@ -78,49 +78,61 @@ const ProfileInfo = () => {
         return true;
     };
 
-    const handleSave = async () => {
-        if (!validateForm()) return;
+const handleSave = async () => {
+    if (!validateForm()) return;
 
-        setLoading(true);
+    setLoading(true);
 
-        try {
-            // Update profile in Firebase Auth
-            await updateUserProfile({
-                displayName: formData.displayName.trim()
-            });
+    try {
+        console.log("Starting profile update...");
+        
+        // Update profile in Firebase Auth
+        console.log("Updating Firebase profile...");
+        await updateUserProfile({
+            displayName: formData.displayName.trim()
+        });
 
-            // Update additional user data in your database
-            const updateData = {
-                displayName: formData.displayName.trim(),
-                nidNumber: formData.nidNumber || '',
-                address: formData.address.trim(),
-                updatedAt: new Date().toISOString()
-            };
+        // Update additional user data in your database
+        const updateData = {
+            displayName: formData.displayName.trim(),
+            nidNumber: formData.nidNumber || '',
+            address: formData.address.trim(),
+            userId: user.email // Make sure this is sent
+        };
 
-            const response = await axiosSecure.patch('/users/update-profile', updateData);
+        console.log("Sending update data:", updateData);
 
-            if (response.data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Profile Updated!',
-                    text: 'Your profile has been updated successfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                setIsEditing(false);
-            }
-        } catch (error) {
-            console.error('Error updating profile:', error);
+        const response = await axiosSecure.patch('/users/update-profile', updateData);
+        console.log("Backend response:", response.data);
+
+        if (response.data.success) {
             Swal.fire({
-                icon: 'error',
-                title: 'Update Failed',
-                text: 'Failed to update profile. Please try again.',
+                icon: 'success',
+                title: 'Profile Updated!',
+                text: 'Your profile has been updated successfully',
+                showConfirmButton: false,
+                timer: 1500
             });
-        } finally {
-            setLoading(false);
+            setIsEditing(false);
+            
+            // Force refresh to get updated data
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         }
-    };
-
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        console.error('Error details:', error.response?.data);
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text: error.response?.data?.message || 'Failed to update profile. Please try again.',
+        });
+    } finally {
+        setLoading(false);
+    }
+};
     const handleCancel = () => {
         // Reset form data to original user data
         setFormData({
