@@ -6,7 +6,7 @@ function LandingPage() {
             {/* Hero Section */}
             <section style={{ background: '#e0f7fa', padding: '60px 20px', textAlign: 'center' }}>
                 <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>
-                    Welcome to Agri<span style={{ color: '#FF2056' }}>Linker</span>
+                    Welcome to Agri<span style={{ color: '#4BAF47' }}>Linker</span>
                 </h1>
                 <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>
                     Sustainable agriculture for a greener future.

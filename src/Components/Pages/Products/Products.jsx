@@ -46,18 +46,18 @@ const Products = () => {
     // Fetch average ratings for all products
     const fetchProductRatings = async (productsList) => {
         try {
-            const ratingPromises = productsList.map(product => 
+            const ratingPromises = productsList.map(product =>
                 axiosSecure.get(`/api/rating-review/product/${product._id}`)
             );
-            
+
             const ratingsResponses = await Promise.all(ratingPromises);
             const ratingsMap = {};
-            
+
             ratingsResponses.forEach((response, index) => {
                 const productId = productsList[index]._id;
                 ratingsMap[productId] = response.data;
             });
-            
+
             setProductRatings(ratingsMap);
         } catch (error) {
             console.error("Error fetching product ratings:", error);
@@ -92,20 +92,20 @@ const Products = () => {
         const stars = [];
         const fullStars = Math.floor(rating);
         const hasHalfStar = rating % 1 !== 0;
-        
+
         for (let i = 0; i < fullStars; i++) {
             stars.push(<span key={i} className="text-yellow-400">★</span>);
         }
-        
+
         if (hasHalfStar) {
             stars.push(<span key="half" className="text-yellow-400">★</span>);
         }
-        
+
         const emptyStars = 5 - stars.length;
         for (let i = 0; i < emptyStars; i++) {
             stars.push(<span key={`empty-${i}`} className="text-gray-300">★</span>);
         }
-        
+
         return stars;
     };
 
@@ -262,7 +262,7 @@ const Products = () => {
                                     ×
                                 </button>
                             </div>
-                            
+
                             {loadingReviews ? (
                                 <div className="text-center py-8">
                                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
@@ -285,7 +285,7 @@ const Products = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="space-y-4">
                                         {selectedProductReviews.reviews.map((review, index) => (
                                             <div key={index} className="border-b border-gray-200 pb-4">
@@ -418,13 +418,13 @@ const Products = () => {
                                             e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
                                         }}
                                     />
-                                    <span className={`absolute top-2 right-2 px-2 py-1 text-xs font-medium rounded ${product.status === 'available'
+                                    <span className={`absolute top-2 right-2 px-2 py-1 text-xs font-medium rounded ${product.status === 'available' && product.quantity.value > 0
                                         ? 'bg-green-100 text-green-800'
                                         : 'bg-red-100 text-red-800'
                                         }`}>
-                                        {product.status}
+                                        {product.status === 'available' && product.quantity.value > 0 ? 'available' : 'sold-out'}
                                     </span>
-                                    
+
                                     {/* Info Button */}
                                     <button
                                         onClick={() => fetchProductReviews(product._id)}
