@@ -14,6 +14,8 @@ import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 import UserProfile from "../Components/Pages/userProfile/userProfile";
 import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest";
 import InvestPage from "../Components/Pages/InvestPage/InvestPage"; // Add import here
+import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
+import MyProducts from "../Components/Pages/MyProducts/MyProducts";
 
 export const router = createBrowserRouter([
     {
@@ -53,7 +55,7 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><RatingReview /></PrivateRoute>,
             },
             {
-                path: 'userProfile',
+                path: '/userProfile',
                 element: <PrivateRoute><UserProfile /></PrivateRoute>
             },
             {
@@ -65,10 +67,13 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><InvestPage /></PrivateRoute>
             },
             {
-                element: <PrivateRoute>
-                    <UserProfile></UserProfile>
-                </PrivateRoute>
+                path: "/crop-recommendation",
+                element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
             },
+            {
+                path: "/my-products",
+                element: <PrivateRoute><MyProducts /></PrivateRoute>,
+            }
         ],
     },
 ]);

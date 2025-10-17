@@ -163,7 +163,7 @@ const Signup = () => {
                                     <option value="" disabled className="text-gray-400">Select your role</option>
                                     <option value="farmer" className="text-gray-800">Farmer</option>
                                     <option value="buyer" className="text-gray-800">Buyer</option>
-                                    <option value="both" className="text-gray-800">Both Farmer & Buyer</option>
+                                    <option value="delivery man" className="text-gray-800">Delivery Man</option>
                                 </select>
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <FontAwesomeIcon icon={faChevronDown} className="text-gray-400" />
