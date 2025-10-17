@@ -63,11 +63,7 @@ export const router = createBrowserRouter([
             {
                 path: "/invest",            // <-- Add this new route
                 element: <PrivateRoute><InvestPage /></PrivateRoute>
-            },
-                element: <PrivateRoute>
-                    <UserProfile></UserProfile>
-                </PrivateRoute>
-            },
+            }
         ],
     },
 ]);
