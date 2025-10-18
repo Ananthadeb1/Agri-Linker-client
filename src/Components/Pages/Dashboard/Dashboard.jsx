@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import {
-    faBars, faTimes, faUsers, faHotel
+    faBars, faTimes, faUsers, faHotel, 
+    faBox, faShoppingCart, faUserCheck, 
+    faHandHoldingUsd, faChartLine, faChartBar
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserManagement from './UserManagement/UserManagement';
+import OrderManagement from './OrderManagement/OrderManagement';
+import ProductManagement from './ProductManagement/ProductManagement';
+import FarmerVerification from './FarmerVerification/FarmerVerification';
+import LoanManagement from './LoanManagement/LoanManagement';
+import InvestmentManagement from './InvestmentManagement/InvestmentManagement';
+import AnalyticsReports from './AnalyticsReports/AnalyticsReports';
 
 const Dashboard = () => {
     const [selected, setSelected] = useState('User Management');
@@ -11,12 +19,23 @@ const Dashboard = () => {
 
     const menuItems = [
         { name: 'User Management', icon: faUsers },
-
+        { name: 'Order Management', icon: faShoppingCart },
+        { name: 'Product Management', icon: faBox },
+        { name: 'Farmer Verification', icon: faUserCheck },
+        { name: 'Loan Management', icon: faHandHoldingUsd },
+        { name: 'Investment Management', icon: faChartLine },
+        { name: 'Analytics & Reports', icon: faChartBar },
     ];
 
     const renderComponent = () => {
         switch (selected) {
             case 'User Management': return <UserManagement />;
+            case 'Order Management': return <OrderManagement />;
+            case 'Product Management': return <ProductManagement />;
+            case 'Farmer Verification': return <FarmerVerification />;
+            case 'Loan Management': return <LoanManagement />;
+            case 'Investment Management': return <InvestmentManagement />;
+            case 'Analytics & Reports': return <AnalyticsReports />;
             default: return <UserManagement />;
         }
     };
@@ -96,7 +115,6 @@ const Dashboard = () => {
                             />
                             {selected}
                         </h1>
-
                     </div>
                 </div>
 
