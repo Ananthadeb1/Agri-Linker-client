@@ -9,6 +9,19 @@ import Main from "../Layout/Main";
 import AddProduct from "../Components/Pages/AddProduct/AddProduct";
 import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
+import Cart from "../Components/Pages/Cart/Cart";
+
+import UserProfile from "../Components/Pages/userProfile/userProfile";
+import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest";
+import InvestPage from "../Components/Pages/InvestPage/InvestPage";
+import OrderTracking from "../Components/Pages/OrderTrack/OrderTracking";
+import RatingReview from "../Components/Pages/RatingReview/RatingReview";
+import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
+import MyProducts from "../Components/Pages/MyProducts/MyProducts";
+
+
+import { Rating } from "@mui/material";
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -20,11 +33,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/products",
-                element: <PrivateRoute> <Products /></PrivateRoute>,
+                element: <PrivateRoute><Products /></PrivateRoute>,
             },
             {
                 path: "/admin-dashboard",
-                element: <PrivateRoute> <Dashboard /></PrivateRoute>,
+                element: <PrivateRoute><Dashboard /></PrivateRoute>,
             },
             {
                 path: "/login",
@@ -36,11 +49,39 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/add-product',
-                element: <PrivateRoute><AddProduct /></PrivateRoute> // Add this route
+                element: <PrivateRoute><AddProduct /></PrivateRoute>
+            },
+            {
+                path: "/cart",
+                element: <PrivateRoute><Cart /></PrivateRoute>,
+            },
+            {
+                path: "/rating-review",
+                element: <RatingReview />,
+            },
+            {
+                path: '/userProfile',
+                element: <PrivateRoute><UserProfile /></PrivateRoute>
+            },
+            {
+                path: "/loan-request",
+                element: <PrivateRoute><LoanRequest /></PrivateRoute>
+            },
+            {
+                path: "/invest",            // <-- Add this new route
+                element: <PrivateRoute><InvestPage /></PrivateRoute>
+            },
+            {
+                path: "/track-order",
+                element: <PrivateRoute><OrderTracking /></PrivateRoute> // Protect with login!
+            },{
+                path: "/crop-recommendation",
+                element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
+            },
+            {
+                path: "/my-products",
+                element: <PrivateRoute><MyProducts /></PrivateRoute>,
             }
         ],
     },
-
 ]);
-
-

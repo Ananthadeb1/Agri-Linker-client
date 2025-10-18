@@ -17,7 +17,6 @@ const NavBar = () => {
             setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
             setPrevScrollPos(currentScrollPos);
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [prevScrollPos]);
@@ -28,20 +27,24 @@ const NavBar = () => {
             .catch(error => console.log(error));
     };
 
-    // Updated navLinks logic
+    // Updated navLinks logic with My Products, Crop Advisor, Loan Request, Invest and Cart
     const navLinks = [
         { path: "/", label: "Home" },
-        ...(user ? [{ path: "/Products", label: "Products" }] : []),
+        ...(user ? [{ path: "/products", label: "Products" }] : []),
+        ...(user ? [{ path: "/my-products", label: "My Products" }] : []),
+        ...(user ? [{ path: "/crop-recommendation", label: "Crop Advisor" }] : []),
+        ...(user ? [{ path: "/loan-request", label: "Loan Request" }] : []),
+        ...(user ? [{ path: "/invest", label: "Invest" }] : []),
+        ...(user ? [{ path: "/cart", label: "My Cart" }] : []),
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
-        ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
+        ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : []),
     ];
 
     return (
         <nav className={`sticky top-0 z-50 bg-white/70 shadow-md backdrop-blur-sm transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="px-4 w-full">
                 <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
-                    <Link to="/" className="text-2xl font-bold text-[#FF2056] tracking-wider">
+                    <Link to="/" className="text-2xl font-bold text-[#4BAF47] tracking-wider">
                         <span className="text-gray-900">Agri</span>Linker
                     </Link>
 
@@ -54,8 +57,8 @@ const NavBar = () => {
                                     to={link.path}
                                     className={({ isActive }) =>
                                         `px-2 py-2 font-medium transition-colors duration-300 border-b-2 ${isActive
-                                            ? 'text-[#FF2056] border-[#FF2056]'
-                                            : 'text-gray-700 hover:text-[#FF2056] border-transparent hover:border-[#FF2056]'}`
+                                            ? 'text-[#4BAF47] border-[#4BAF47]'
+                                            : 'text-black hover:text-[#4BAF47] border-transparent hover:border-[#4BAF47]'}`
                                     }
                                 >
                                     {link.label}
@@ -63,12 +66,11 @@ const NavBar = () => {
                             ))}
                         </div>
 
-                        {/* loggedUser/Auth Section */}
                         {user ? (
                             <div className="ml-6 flex items-center">
-                                <div className="dropdown dropdown-end">
+                                <div className="dropdown dropdown-end dropdown-hover">
                                     <label tabIndex={0} className="cursor-pointer group">
-                                        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#FF2056] transition-colors duration-300">
+                                        <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#4BAF47] transition-colors duration-300">
                                             {user.photoURL ? (
                                                 <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
                                             ) : (
@@ -78,14 +80,14 @@ const NavBar = () => {
                                             )}
                                         </div>
                                     </label>
-                                    <ul tabIndex={0} className="mt-2 p-2 shadow-lg menu dropdown-content bg-white/70 rounded-md w-52 border border-gray-100 backdrop-blur-sm">
+                                    <ul tabIndex={0} className="dropdown-content mt-2 p-2 shadow-lg menu bg-[#ebe9dd] rounded-md w-52 border border-gray-100 backdrop-blur-sm z-50">
                                         <li>
                                             <NavLink
                                                 to="/userProfile"
                                                 className={({ isActive }) =>
                                                     `block px-4 py-2 rounded transition-colors duration-200 ${isActive
-                                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                                        : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                                        : 'text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47]'}`
                                                 }
                                             >
                                                 Profile
@@ -93,46 +95,34 @@ const NavBar = () => {
                                         </li>
                                         <li>
                                             <NavLink
-                                                to="/home"
+                                                to="/cart"
                                                 className={({ isActive }) =>
                                                     `block px-4 py-2 rounded transition-colors duration-200 ${isActive
-                                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                                        : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                                        : 'text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47]'}`
                                                 }
                                             >
-                                                Dashboard
+                                                My Cart
                                             </NavLink>
                                         </li>
+                                        {/* ---- Added Order Track link ---- */}
                                         <li>
                                             <NavLink
-                                                to="/add-product"
+                                                to="/track-order"
                                                 className={({ isActive }) =>
                                                     `block px-4 py-2 rounded transition-colors duration-200 ${isActive
-                                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                                        : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
+                                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                                        : 'text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47]'}`
                                                 }
                                             >
-                                                Add Product
+                                                Order Track
                                             </NavLink>
                                         </li>
-                                        {isAdmin && (
-                                            <li>
-                                                <NavLink
-                                                    to="/admin-dashboard"
-                                                    className={({ isActive }) =>
-                                                        `block px-4 py-2 rounded transition-colors duration-200 ${isActive
-                                                            ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                                            : 'text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056]'}`
-                                                    }
-                                                >
-                                                    Admin Dashboard
-                                                </NavLink>
-                                            </li>
-                                        )}
+                                        {/* ---- End Addition ---- */}
                                         <li>
                                             <button
                                                 onClick={handleLogOut}
-                                                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-[#FFEAEE] hover:text-[#FF2056] rounded transition-colors duration-200"
+                                                className="block w-full text-left px-4 py-2 text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47] rounded transition-colors duration-200"
                                             >
                                                 Log out
                                             </button>
@@ -142,25 +132,30 @@ const NavBar = () => {
                             </div>
                         ) : (
                             <div className="ml-6 flex items-center">
-                                <NavLink
-                                    to="/login"
-                                    className={({ isActive }) =>
-                                        `px-5 py-1.5 rounded-md font-medium transition-colors duration-300 shadow-sm ${isActive
-                                            ? 'bg-[#E61C4D] text-white'
-                                            : 'bg-[#FF2056] text-white hover:bg-[#E61C4D]'}`
-                                    }
-                                >
-                                    Log in
-                                </NavLink>
+                                {(() => {
+                                    const isLoginActive = window.location.pathname === '/login';
+                                    const to = isLoginActive ? '/signup' : '/login';
+                                    const label = isLoginActive ? 'Sign up' : 'Log in';
+                                    return (
+                                        <NavLink
+                                            to={to}
+                                            className={({ isActive }) =>
+                                                `px-5 py-1.5 rounded-md font-medium transition-colors duration-300 shadow-sm ${isActive
+                                                    ? 'bg-[#3A8E36] text-white'
+                                                    : 'bg-[#4BAF47] text-white hover:bg-[#3A8E36]'}`
+                                            }
+                                        >
+                                            {label}
+                                        </NavLink>
+                                    );
+                                })()}
                             </div>
                         )}
                     </div>
-
-                    {/* Mobile menu button */}
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="p-2 rounded-md text-gray-700 hover:text-[#FF2056] focus:outline-none"
+                            className="p-2 rounded-md text-black hover:text-[#4BAF47] focus:outline-none"
                             aria-label="Toggle menu"
                         >
                             <svg
@@ -192,8 +187,8 @@ const NavBar = () => {
                             onClick={() => setMobileMenuOpen(false)}
                             className={({ isActive }) =>
                                 `block px-3 py-2 rounded-md text-base font-medium ${isActive
-                                    ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                    : 'text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]'}`
+                                    ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                    : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
                             }
                         >
                             {link.label}
@@ -206,28 +201,39 @@ const NavBar = () => {
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={({ isActive }) =>
                                     `block px-3 py-2 rounded-md text-base font-medium ${isActive
-                                        ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                        : 'text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]'}`
+                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                        : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
                                 }
                             >
                                 Profile
                             </NavLink>
-                            {isAdmin && (
-                                <NavLink
-                                    to="/admin-dashboard"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className={({ isActive }) =>
-                                        `block px-3 py-2 rounded-md text-base font-medium ${isActive
-                                            ? 'text-[#FF2056] bg-[#FFEAEE]'
-                                            : 'text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]'}`
-                                    }
-                                >
-                                    Admin Dashboard
-                                </NavLink>
-                            )}
+                            <NavLink
+                                to="/cart"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={({ isActive }) =>
+                                    `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                        : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
+                                }
+                            >
+                                My Cart
+                            </NavLink>
+                            {/* ---- Added Order Track link ---- */}
+                            <NavLink
+                                to="/track-order"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={({ isActive }) =>
+                                    `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                        : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
+                                }
+                            >
+                                Order Track
+                            </NavLink>
+                            {/* ---- End Addition ---- */}
                             <button
                                 onClick={handleLogOut}
-                                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#FF2056] hover:bg-[#FFEAEE]"
+                                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]"
                             >
                                 Log out
                             </button>
@@ -238,8 +244,8 @@ const NavBar = () => {
                             onClick={() => setMobileMenuOpen(false)}
                             className={({ isActive }) =>
                                 `block px-3 py-2 rounded-md text-base font-medium ${isActive
-                                    ? 'bg-[#E61C4D] text-white'
-                                    : 'bg-[#FF2056] text-white hover:bg-[#E61C4D]'}`
+                                    ? 'bg-[#3A8E36] text-white'
+                                    : 'bg-[#4BAF47] text-white hover:bg-[#3A8E36]'}`
                             }
                         >
                             Log in

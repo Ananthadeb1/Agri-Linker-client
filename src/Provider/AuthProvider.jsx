@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useEffect, useState } from "react";
 import {
@@ -26,10 +27,8 @@ const axiosSecure = axios.create({
 });
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loggedUser, setLoggedUser] = useState(null);
-    const [loading, setLoading] = useState(true); // Combined loading state
-    const [profileUpdating, setProfileUpdating] = useState(false); // Only for profile updates
+    const [user, setUser] = useState(null); // ✅ Single source of truth
+    const [loading, setLoading] = useState(true);
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
 
@@ -38,8 +37,8 @@ const AuthProvider = ({ children }) => {
         try {
             await signOut(auth);
             setUser(null);
-            setLoggedUser(null);
             localStorage.removeItem('access-token');
+            navigate('/login'); // ✅ Redirect to login after logout
         } finally {
             setLoading(false);
         }
@@ -59,7 +58,6 @@ const AuthProvider = ({ children }) => {
                 const status = error.response?.status;
                 if (status === 401 || status === 403) {
                     await logout();
-                    navigate('/login');
                 }
                 return Promise.reject(error);
             }
@@ -71,12 +69,11 @@ const AuthProvider = ({ children }) => {
         };
     }, [logout, navigate]);
 
-
     const createUser = async (email, password) => {
         setLoading(true);
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            setUser(userCredential.user);
+            // User will be set automatically via onAuthStateChanged
             return userCredential;
         } finally {
             setLoading(false);
@@ -87,9 +84,10 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            setUser(userCredential.user);
-            await fetchUserData(userCredential.user.email);
+            // User will be set automatically via onAuthStateChanged
             return userCredential;
+        } catch (error) {
+            throw error; // Re-throw error for handling in component
         } finally {
             setLoading(false);
         }
@@ -107,72 +105,110 @@ const AuthProvider = ({ children }) => {
                 image: loggedUser.photoURL
             };
             await axiosPublic.post("/users", userInfo);
-            setUser(loggedUser);
-            await fetchUserData(loggedUser.email);
+            // User will be set automatically via onAuthStateChanged
             return result;
+        } catch (error) {
+            throw error; // Re-throw error for handling in component
         } finally {
             setLoading(false);
         }
     };
 
-    const updateUserProfile = async (name, photo) => {
-        setProfileUpdating(true);
+    // ✅ Unified profile update for both Firebase and MongoDB
+    const updateUserProfile = async (updateData) => {
         try {
-            await updateProfile(auth.currentUser, {
-                displayName: name,
-                photoURL: photo
-            });
-            setUser({ ...auth.currentUser });
-            // Refresh user data after profile update
+            // 1. Update Firebase profile
+            if (updateData.name || updateData.photoURL) {
+                await updateProfile(auth.currentUser, {
+                    displayName: updateData.name || auth.currentUser.displayName,
+                    photoURL: updateData.photoURL || auth.currentUser.photoURL
+                });
+            }
+
+            // 2. Update MongoDB using legacy profile route (UID based)
+            if (user?.uid) {
+                await axiosSecure.patch(`/profile/${user.uid}`, updateData);
+            }
+
+            // 3. Refresh user data to sync everywhere
             await fetchUserData(auth.currentUser.email);
-        } finally {
-            setProfileUpdating(false);
+
+            return true;
+        } catch (error) {
+            console.error("Profile update failed:", error);
+            throw error;
         }
     };
 
+    // ✅ Fetch and merge user data
     const fetchUserData = async (email) => {
         try {
             const tokenResponse = await axiosPublic.post('/jwt', { email });
             if (tokenResponse.data.token) {
                 localStorage.setItem('access-token', tokenResponse.data.token);
+
+                // Fetch MongoDB user data
                 const userResponse = await axiosSecure.get(`/users/${email}`);
-                setLoggedUser(userResponse.data);
+                const mongoUser = userResponse.data;
+
+                // Get current Firebase user
+                const firebaseUser = auth.currentUser;
+
+                // ✅ Merge data: MongoDB data has priority
+                const mergedUser = {
+                    ...firebaseUser, // Firebase base data
+                    ...mongoUser,    // MongoDB extended data
+                    // Ensure we use the latest data
+                    displayName: mongoUser?.name || firebaseUser?.displayName,
+                    photoURL: mongoUser?.photoURL || firebaseUser?.photoURL,
+                    email: mongoUser?.email || firebaseUser?.email,
+                    uid: mongoUser?.uid || firebaseUser?.uid
+                };
+
+                setUser(mergedUser);
             }
         } catch (error) {
             console.error("Failed to fetch user data:", error);
-            // If fetching user data fails, log out the user
-            await logout();
+            // Fallback to Firebase user if MongoDB fails
+            setUser(auth.currentUser);
+        }
+    };
+
+    // ✅ Force refresh user data
+    const refreshUser = async () => {
+        if (auth.currentUser?.email) {
+            await fetchUserData(auth.currentUser.email);
         }
     };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                setUser(currentUser);
                 await fetchUserData(currentUser.email);
+                // ✅ Auto redirect after login
+                if (window.location.pathname === '/login') {
+                    navigate('/');
+                }
             } else {
                 setUser(null);
-                setLoggedUser(null);
                 localStorage.removeItem('access-token');
             }
             setLoading(false);
         });
 
         return unsubscribe;
-    }, [axiosPublic]);
+    }, [axiosPublic, navigate]);
 
     const authInfo = {
-        user: loggedUser, // Use loggedUser as the main user object
+        user, // ✅ Single unified user object
         loading,
-        profileUpdating,
         isAuthenticated: !!user,
         createUser,
         login,
         loginWithGoogle,
         logout,
         updateUserProfile,
-        setUser,
-        fetchUserData,
+        refreshUser,
         axiosSecure
     };
 

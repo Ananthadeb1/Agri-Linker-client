@@ -3,40 +3,81 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Footer = () => {
     return (
-        <footer>
-            <div className="footer h-72 flex flex-col md:flex-row gap-0 py-0 text-white">
-                <div className="w-full h-full md:w-1/2  flex justify-center items-center" style={{ backgroundColor: '#1F2937' }}>
-                    <div className="text-center h-max">
-                        <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
-                        <p className="mb-2">Email: contact@codecrafters.com</p>
-                        <p className="mb-2">Phone: +1 (123) 456-7890</p>
-                        <p className="mb-2">Address: 123 Code Street, Dev City, 45678</p>
+        <footer className="font-sans">
+            {/* Main Footer Section */}
+            <div className="footer flex flex-col md:flex-row gap-0 py-0 text-white">
+                {/* Left Section - Contact */}
+                <div className="w-full md:w-1/2 py-16 flex justify-center items-center" style={{ backgroundColor: '#24231D' }}>
+                    <div className="text-center h-max px-6">
+                        <h2 className="text-2xl font-bold mb-8 text-[#cbad5a]">Contact Us</h2>
+                        <div className="space-y-4 text-gray-100">
+                            <div className="flex items-center justify-center gap-3">
+                                <span className="text-sm opacity-90">contact@agrilinker.com</span>
+                            </div>
+                            <div className="flex items-center justify-center gap-3">
+                                <span className="text-sm opacity-90">01612345678</span>
+                            </div>
+                            <div className="flex items-center justify-center gap-3">
+                                <span className="text-sm opacity-90">123 Natun Bazar, Dhaka, Bangladesh</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="w-full md:w-1/2 h-full flex  justify-center items-center" style={{ backgroundColor: '#111827' }}>
-                    <div className="text-center">
-                        <h2 className="text-2xl font-bold mb-4">Follow Us</h2>
-                        <p>Join us on socials</p>
-                        <div className="flex justify-center gap-4 mt-4">
-                            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-                                <FontAwesomeIcon icon={faFacebookF} size="lg" />
+
+                {/* Right Section - Social Media */}
+                <div className="w-full md:w-1/2 py-16 flex justify-center items-center" style={{ backgroundColor: '#24231D' }}>
+                    <div className="text-center px-6">
+                        <h2 className="text-2xl font-bold mb-8 text-[#cbad5a]">Follow Us</h2>
+                        <p className="text-sm mb-8 opacity-90">Join us on social media</p>
+                        <div className="flex justify-center gap-8">
+                            <a
+                                href="#"
+                                className="w-10 h-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-80 text-[#cbad5a]"
+                            >
+                                <FontAwesomeIcon
+                                    icon={faFacebookF}
+                                    size="lg"
+                                />
                             </a>
-                            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-                                <FontAwesomeIcon icon={faYoutube} size="lg" />
+                            <a
+                                href="#"
+                                className="w-10 h-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-80 text-[#cbad5a]"
+                            >
+                                <FontAwesomeIcon
+                                    icon={faYoutube}
+                                    size="lg"
+                                />
                             </a>
-                            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-                                <FontAwesomeIcon icon={faInstagram} size="lg" />
+                            <a
+                                href="#"
+                                className="w-10 h-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-80 text-[#cbad5a]"
+                            >
+                                <FontAwesomeIcon
+                                    icon={faInstagram}
+                                    size="lg"
+                                />
                             </a>
-                            <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-                                <FontAwesomeIcon icon={faTwitter} size="lg" />
+                            <a
+                                href="#"
+                                className="w-10 h-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-80 text-[#cbad5a]"
+                            >
+                                <FontAwesomeIcon
+                                    icon={faTwitter}
+                                    size="lg"
+                                />
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="p-2 footer-center text-white text-center" style={{ backgroundColor: '#151515' }}>
-                <div>
-                    <p>Copyright © 2025 - All right reserved by Code_Crafters</p>
+
+            {/* Bottom Copyright Section */}
+            <div className="py-4 text-white text-center" style={{ backgroundColor: '#1F1E17' }}>
+                <div className="container  mx-auto px-4">
+                    <p className="text-sm opacity-90 mb-2">
+                        Copyright © 2025 - All right reserved by <span className="text-[#cbad5a]">Agri_Linker</span>
+                    </p>
+
                 </div>
             </div>
         </footer>
