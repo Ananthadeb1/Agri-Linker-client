@@ -17,7 +17,7 @@ import InvestPage from "../Components/Pages/InvestPage/InvestPage";
 import OrderTracking from "../Components/Pages/OrderTrack/OrderTracking";
 
 
-import InvestPage from "../Components/Pages/InvestPage/InvestPage"; // Add import here
+ // Add import here
 import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
 import MyProducts from "../Components/Pages/MyProducts/MyProducts";
 
@@ -73,9 +73,9 @@ export const router = createBrowserRouter([
             {
                 path: "/track-order",
                 element: <PrivateRoute><OrderTracking /></PrivateRoute> // Protect with login!
-            }
+            },
            
-        ]
+            {
                 path: "/crop-recommendation",
                 element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
             },

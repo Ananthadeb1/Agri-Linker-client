@@ -5,7 +5,7 @@ import { ChevronRightIcon, CameraIcon, UserIcon } from '@heroicons/react/24/outl
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
-import ProfileInfo from './ProfileInfo/profileInfo';
+import ProfileInfo from './ProfileInfo/ProfileInfo';
  
 
 const UserProfile = () => {
