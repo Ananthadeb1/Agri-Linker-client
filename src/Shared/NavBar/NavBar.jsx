@@ -17,7 +17,6 @@ const NavBar = () => {
             setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
             setPrevScrollPos(currentScrollPos);
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [prevScrollPos]);
@@ -38,14 +37,13 @@ const NavBar = () => {
         ...(user ? [{ path: "/invest", label: "Invest" }] : []),
         ...(user ? [{ path: "/cart", label: "My Cart" }] : []),
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
-        ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : [])
+        ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : []),
     ];
 
     return (
         <nav className={`sticky top-0 z-50 bg-white/70 shadow-md backdrop-blur-sm transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
             <div className="px-4 w-full">
                 <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
                     <Link to="/" className="text-2xl font-bold text-[#4BAF47] tracking-wider">
                         <span className="text-gray-900">Agri</span>Linker
                     </Link>
@@ -68,7 +66,6 @@ const NavBar = () => {
                             ))}
                         </div>
 
-                        {/* loggedUser/Auth Section */}
                         {user ? (
                             <div className="ml-6 flex items-center">
                                 <div className="dropdown dropdown-end dropdown-hover">
@@ -108,6 +105,20 @@ const NavBar = () => {
                                                 My Cart
                                             </NavLink>
                                         </li>
+                                        {/* ---- Added Order Track link ---- */}
+                                        <li>
+                                            <NavLink
+                                                to="/track-order"
+                                                className={({ isActive }) =>
+                                                    `block px-4 py-2 rounded transition-colors duration-200 ${isActive
+                                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                                        : 'text-black hover:bg-[#F0F9F0] hover:text-[#4BAF47]'}`
+                                                }
+                                            >
+                                                Order Track
+                                            </NavLink>
+                                        </li>
+                                        {/* ---- End Addition ---- */}
                                         <li>
                                             <button
                                                 onClick={handleLogOut}
@@ -207,6 +218,19 @@ const NavBar = () => {
                             >
                                 My Cart
                             </NavLink>
+                            {/* ---- Added Order Track link ---- */}
+                            <NavLink
+                                to="/track-order"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className={({ isActive }) =>
+                                    `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                                        ? 'text-[#4BAF47] bg-[#F0F9F0]'
+                                        : 'text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]'}`
+                                }
+                            >
+                                Order Track
+                            </NavLink>
+                            {/* ---- End Addition ---- */}
                             <button
                                 onClick={handleLogOut}
                                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-black hover:text-[#4BAF47] hover:bg-[#F0F9F0]"
