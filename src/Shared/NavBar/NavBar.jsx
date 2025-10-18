@@ -27,9 +27,12 @@ const NavBar = () => {
             .catch(error => console.log(error));
     };
 
+    // Updated navLinks logic with My Products, Crop Advisor, Loan Request, Invest and Cart
     const navLinks = [
         { path: "/", label: "Home" },
         ...(user ? [{ path: "/products", label: "Products" }] : []),
+        ...(user ? [{ path: "/my-products", label: "My Products" }] : []),
+        ...(user ? [{ path: "/crop-recommendation", label: "Crop Advisor" }] : []),
         ...(user ? [{ path: "/loan-request", label: "Loan Request" }] : []),
         ...(user ? [{ path: "/invest", label: "Invest" }] : []),
         ...(user ? [{ path: "/cart", label: "My Cart" }] : []),

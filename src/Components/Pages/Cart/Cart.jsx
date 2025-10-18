@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import Payment from "./Payment"; // Import the Payment component
 
 const Cart = () => {
     const { user } = useAuth();
@@ -172,7 +173,7 @@ const Cart = () => {
                                             <img
                                                 src={`http://localhost:5000${item.image}`}
                                                 alt={item.productName}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-20 object-cover"
                                                 onError={(e) => {
                                                     e.target.src = 'https://via.placeholder.com/80x80?text=No+Image';
                                                 }}

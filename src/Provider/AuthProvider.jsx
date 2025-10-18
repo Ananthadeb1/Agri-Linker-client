@@ -125,7 +125,7 @@ const AuthProvider = ({ children }) => {
                 });
             }
 
-            // 2. Update MongoDB
+            // 2. Update MongoDB using legacy profile route (UID based)
             if (user?.uid) {
                 await axiosSecure.patch(`/profile/${user.uid}`, updateData);
             }
