@@ -62,26 +62,26 @@ const Cart = () => {
                 totalAmount: calculateTotal()
             });
 
-            console.log("✅ OrderTrack response:", response.data);
+        console.log("✅ OrderTrack response:", response.data);
 
-            if (response.data.success) {
-                setTrackingNumber(response.data.trackingNumber);
-                setShowTrackingModal(true);
-                setOrderPlaced(true);
-                setCartItems([]);
-                fetchCartItems();
-            } else {
-                alert('Order failed: ' + (response.data.message || 'Unknown error'));
-            }
-        } catch (error) {
-            console.error("❌ Order error:", error);
-            console.error("❌ Error response:", error.response?.data);
-
-            if (error.response?.data?.message) {
-                alert('Order failed: ' + error.response.data.message);
-            } else {
-                alert('Failed to place order. Please try again.');
-            }
+        if (response.data.success) {
+            setTrackingNumber(response.data.trackingNumber);
+            setShowTrackingModal(true);
+            setOrderPlaced(true);
+            
+            // ✅ Save pending reviews to database
+            console.log("💾 Saving pending reviews for cart items:", cartItems);
+            const saveResponse = await axiosSecure.post('/api/rating-review/save-pending', {
+                userId: user.email,
+                orderId: response.data.orderId,
+                cartItems: cartItems
+            });
+            
+            console.log("✅ Pending reviews saved:", saveResponse.data);
+            
+            // Now clear the cart
+            setCartItems([]);
+            fetchCartItems();
         }
     };
 
@@ -326,12 +326,12 @@ const Cart = () => {
                                 >
                                     {!trackingNumber ? 'Processing...' : 'Track This Order'}
                                 </button>
-                                <button
+                                {/* <button
                                     onClick={handleRateProducts}
                                     className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-semibold"
                                 >
                                     Rate Products
-                                </button>
+                                </button> */}
                                 <button
                                     onClick={() => setShowTrackingModal(false)}
                                     className="w-full bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition font-semibold"

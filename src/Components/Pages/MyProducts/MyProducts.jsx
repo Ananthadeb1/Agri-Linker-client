@@ -11,7 +11,7 @@ const MyProducts = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [deleting, setDeleting] = useState(null);
+
 
     useEffect(() => {
         if (user?.email) {

@@ -10,7 +10,7 @@ import AddProduct from "../Components/Pages/AddProduct/AddProduct";
 import LandingPage from "../Components/Pages/LandingPage/LandingPage";
 import Dashboard from "../Components/Pages/Dashboard/Dashboard";
 import Cart from "../Components/Pages/Cart/Cart";
-import RatingReview from "../Components/Pages/RatingReview/RatingReview";
+
 import UserProfile from "../Components/Pages/userProfile/userProfile";
 import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest";
 import InvestPage from "../Components/Pages/InvestPage/InvestPage";
@@ -18,8 +18,13 @@ import OrderTracking from "../Components/Pages/OrderTrack/OrderTracking";
 
 
  // Add import here
+import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
 import MyProducts from "../Components/Pages/MyProducts/MyProducts";
+
+
+
+import { Rating } from "@mui/material";
 
 export const router = createBrowserRouter([
     {
@@ -56,7 +61,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/rating-review",
-                element: <PrivateRoute><RatingReview /></PrivateRoute>,
+                element: <RatingReview />,
             },
             {
                 path: '/userProfile',
