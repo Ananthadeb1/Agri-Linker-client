@@ -37,7 +37,9 @@ const NavBar = () => {
         ...(user ? [{ path: "/invest", label: "Invest" }] : []),
         ...(user ? [{ path: "/cart", label: "My Cart" }] : []),
         ...(user ? [{ path: "/add-product", label: "Add Product" }] : []),
+        ...(user ? [{ path: "/rating-review", label: "Rate Products" }] : []), 
         ...(isAdmin ? [{ path: "/admin-dashboard", label: "Admin Dashboard" }] : []),
+        
     ];
 
     return (
