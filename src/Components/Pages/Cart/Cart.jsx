@@ -13,6 +13,7 @@ const Cart = () => {
     const [showTrackingModal, setShowTrackingModal] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState("");
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false); // New state for payment modal
 
     useEffect(() => {
         if (user?.email) {
@@ -47,13 +48,19 @@ const Cart = () => {
         }
     };
 
-    const handleOrderNow = async () => {
-    try {
-        console.log("🛒 Placing order via OrderTrack for user:", user.email);
+    // New function to handle payment success
+    const handlePaymentSuccess = async (paymentData) => {
+        try {
+            console.log("🛒 Placing order via OrderTrack for user:", user.email);
+            console.log("💰 Payment data:", paymentData);
 
-        const response = await axiosSecure.post('/api/OrderTrack/create', {
-            userId: user.email
-        });
+            // Use OrderTrack instead of orders
+            const response = await axiosSecure.post('/api/OrderTrack/create', {
+                userId: user.email,
+                paymentMethod: paymentData.paymentMethod,
+                paymentStatus: 'completed',
+                totalAmount: calculateTotal()
+            });
 
         console.log("✅ OrderTrack response:", response.data);
 
@@ -76,10 +83,17 @@ const Cart = () => {
             setCartItems([]);
             fetchCartItems();
         }
-    } catch (error) {
-        console.error("❌ Order error:", error);
-    }
-};
+    };
+
+    // Modified handleOrderNow to show payment modal
+    const handleOrderNow = () => {
+        if (cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+        setShowPaymentModal(true);
+    };
+
     const handleTrackOrder = () => {
         if (trackingNumber) {
             setShowTrackingModal(false);
@@ -232,7 +246,7 @@ const Cart = () => {
                                     : 'bg-green-500 text-white hover:bg-green-600'
                                     }`}
                             >
-                                {cartItems.length === 0 ? 'Cart is Empty' : 'Order Now'}
+                                {cartItems.length === 0 ? 'Cart is Empty' : 'Proceed to Payment'}
                             </button>
                         </div>
 
@@ -249,6 +263,17 @@ const Cart = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Payment Modal */}
+            {showPaymentModal && (
+                <Payment
+                    cartItems={cartItems}
+                    totalAmount={calculateTotal()}
+                    userId={user.email}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onClose={() => setShowPaymentModal(false)}
+                />
             )}
 
             {/* Order Success Modal */}

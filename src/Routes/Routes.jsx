@@ -15,6 +15,9 @@ import UserProfile from "../Components/Pages/userProfile/userProfile";
 import LoanRequest from "../Components/Pages/LoanRequest/LoanRequest";
 import InvestPage from "../Components/Pages/InvestPage/InvestPage";
 import OrderTracking from "../Components/Pages/OrderTrack/OrderTracking";
+
+
+ // Add import here
 import RatingReview from "../Components/Pages/RatingReview/RatingReview";
 import CropRecommendation from "../Components/Pages/CropRecommendation/CropRecommendation";
 import MyProducts from "../Components/Pages/MyProducts/MyProducts";
@@ -75,7 +78,9 @@ export const router = createBrowserRouter([
             {
                 path: "/track-order",
                 element: <PrivateRoute><OrderTracking /></PrivateRoute> // Protect with login!
-            },{
+            },
+           
+            {
                 path: "/crop-recommendation",
                 element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
             },
