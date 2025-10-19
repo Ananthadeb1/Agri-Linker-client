@@ -79,7 +79,6 @@ export const router = createBrowserRouter([
                 path: "/track-order",
                 element: <PrivateRoute><OrderTracking /></PrivateRoute> // Protect with login!
             },
-           
             {
                 path: "/crop-recommendation",
                 element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
