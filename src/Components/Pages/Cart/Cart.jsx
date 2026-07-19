@@ -62,26 +62,30 @@ const Cart = () => {
                 totalAmount: calculateTotal()
             });
 
-        console.log("✅ OrderTrack response:", response.data);
+            console.log("✅ OrderTrack response:", response.data);
 
-        if (response.data.success) {
-            setTrackingNumber(response.data.trackingNumber);
-            setShowTrackingModal(true);
-            setOrderPlaced(true);
-            
-            // ✅ Save pending reviews to database
-            console.log("💾 Saving pending reviews for cart items:", cartItems);
-            const saveResponse = await axiosSecure.post('/api/rating-review/save-pending', {
-                userId: user.email,
-                orderId: response.data.orderId,
-                cartItems: cartItems
-            });
-            
-            console.log("✅ Pending reviews saved:", saveResponse.data);
-            
-            // Now clear the cart
-            setCartItems([]);
-            fetchCartItems();
+            if (response.data.success) {
+                setTrackingNumber(response.data.trackingNumber);
+                setShowTrackingModal(true);
+                setOrderPlaced(true);
+
+                // ✅ Save pending reviews to database
+                console.log("💾 Saving pending reviews for cart items:", cartItems);
+                const saveResponse = await axiosSecure.post('/api/rating-review/save-pending', {
+                    userId: user.email,
+                    orderId: response.data.orderId,
+                    cartItems: cartItems
+                });
+
+                console.log("✅ Pending reviews saved:", saveResponse.data);
+
+                // Now clear the cart
+                setCartItems([]);
+                fetchCartItems();
+            }
+        } catch (error) {
+            console.error("Error processing payment:", error);
+            alert("Failed to process payment. Please try again.");
         }
     };
 
@@ -105,15 +109,15 @@ const Cart = () => {
         }
     };
 
-    const handleRateProducts = () => {
-        setShowTrackingModal(false);
-        navigate('/rating-review', {
-            state: {
-                orderedProducts: cartItems,
-                trackingNumber: trackingNumber
-            }
-        });
-    };
+    // const handleRateProducts = () => {
+    //     setShowTrackingModal(false);
+    //     navigate('/rating-review', {
+    //         state: {
+    //             orderedProducts: cartItems,
+    //             trackingNumber: trackingNumber
+    //         }
+    //     });
+    // };
 
     const copyToClipboard = () => {
         if (trackingNumber) {

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
- 
+
 
 const UserProfile = () => {
     const { user, updateUserProfile, } = useAuth(); // ✅ Use auth functions
@@ -126,7 +126,7 @@ const UserProfile = () => {
         return (
             <div className="bg-gray-50 rounded-lg p-6">
                 <div className="text-center py-8">
-                  <ProfileInfo />
+                    <ProfileInfo />
                 </div>
             </div>
         );
