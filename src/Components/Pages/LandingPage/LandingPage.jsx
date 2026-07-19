@@ -1,5 +1,4 @@
 import React from "react";
-import bannerImg from "./LandingPageImages/farming_banner.jpg";
 
 export default function LandingPage() {
     return (
@@ -8,23 +7,24 @@ export default function LandingPage() {
             <section
                 className="relative bg-cover bg-center h-[90vh] flex flex-col justify-center items-start px-10 text-white"
                 style={{
-                    backgroundImage: `url('${bannerImg}')`,
+                    backgroundImage:
+                        "url('https://img.freepik.com/free-photo/farmer-standing-wheat-field-with-tablet_342744-1040.jpg')",
                 }}
             >
                 <div className="bg-black/40 absolute inset-0"></div>
                 <div className="relative z-10 max-w-2xl">
                     <p className="uppercase tracking-widest text-sm mb-2">
-                        Welcome to Agrios Farming
+                        Welcome to Smart Farming
                     </p>
                     <h1 className="text-5xl font-bold leading-tight mb-4">
-                        Agriculture <br /> Eco Farming
+                        Grow Smarter <br /> with Modern Agriculture
                     </h1>
                     <p className="mb-6 text-lg">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
-                        tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+                        Empowering farmers with smart tools, real-time data, and AI-based
+                        insights for better crop yield and sustainability.
                     </p>
                     <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-md">
-                        Discover More
+                        Get Started
                     </button>
                 </div>
             </section>
@@ -33,18 +33,18 @@ export default function LandingPage() {
             <section className="flex justify-center gap-6 -mt-16 relative z-20 px-6 flex-wrap">
                 {[
                     {
-                        title: "We're using a new technology",
-                        img: "https://img.freepik.com/free-photo/planting-young-tree_1150-11114.jpg",
+                        title: "IoT Crop Monitoring",
+                        img: "https://img.freepik.com/free-photo/closeup-shot-hand-holding-smartphone-with-smart-farming-app_181624-45960.jpg",
                         label: "Feature 01",
                     },
                     {
-                        title: "Good in smart organic services",
-                        img: "https://img.freepik.com/free-photo/fresh-organic-vegetables_144627-20164.jpg",
+                        title: "AI-Based Weather Forecast",
+                        img: "https://img.freepik.com/free-photo/agronomist-using-weather-forecast-smartphone-farm_342744-1224.jpg",
                         label: "Feature 02",
                     },
                     {
-                        title: "Reforming in the systems",
-                        img: "https://img.freepik.com/free-photo/eco-friendly-planting-farming-concept_53876-133965.jpg",
+                        title: "Smart Irrigation System",
+                        img: "https://img.freepik.com/free-photo/smart-irrigation-system-with-tablet_342744-990.jpg",
                         label: "Feature 03",
                     },
                 ].map((item, index) => (
@@ -52,7 +52,7 @@ export default function LandingPage() {
                         key={index}
                         className="bg-white rounded-2xl shadow-lg w-80 text-center p-6 hover:-translate-y-2 transition-transform"
                     >
-                        <p className="text-yellow-500 font-semibold mb-2">{item.label}</p>
+                        <p className="text-green-500 font-semibold mb-2">{item.label}</p>
                         <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
                         <img
                             src={item.img}
@@ -63,66 +63,62 @@ export default function LandingPage() {
                 ))}
             </section>
 
-            {/* Infrastructure Section */}
+            {/* System Section */}
             <section className="flex flex-col lg:flex-row items-center justify-center py-24 px-10 gap-10">
                 <div className="relative flex-1 flex justify-center">
                     <img
-                        src="https://img.freepik.com/free-photo/tractor-harvesting-field-during-sunset_181624-6158.jpg"
-                        alt="Farm"
+                        src="https://img.freepik.com/free-photo/modern-agricultural-concept-with-drone-field_342744-1155.jpg"
+                        alt="Smart Farming"
                         className="w-[400px] h-[400px] rounded-full object-cover shadow-lg"
                     />
                 </div>
 
                 <div className="flex-1 max-w-lg">
-                    <p className="text-yellow-500 font-semibold mb-2">Our Infrastructure</p>
+                    <p className="text-green-500 font-semibold mb-2">Our System</p>
                     <h2 className="text-3xl font-bold mb-3">
-                        Agriculture & Organic <br /> Product Farm
+                        Digital Solutions <br /> for Every Farmer
                     </h2>
                     <p className="text-green-600 font-semibold mb-3">
-                        Agrios is the largest global organic farm.
+                        Bringing innovation and intelligence to agriculture.
                     </p>
                     <p className="mb-4 text-gray-600">
-                        There are many variations of passages of lorem ipsum available, but
-                        the majority have suffered alteration in some form by injected
-                        humour or random words which don't look even.
+                        Smart Farming uses sensors, weather data, and analytics to optimize
+                        irrigation, fertilizer, and crop management for maximum efficiency.
                     </p>
 
                     <ul className="mb-5 space-y-2">
-                        <li>🌱 Growing fruits & vegetables</li>
-                        <li>🍋 Tips for ripening your fruits</li>
-                        <li>
-                            📄 Lorem Ipsum is not simply random text, making this the first
-                            true text generator on the internet.
-                        </li>
+                        <li>🌾 Monitor soil moisture and crop health</li>
+                        <li>☀️ Get AI-powered weather and pest predictions</li>
+                        <li>💧 Automate irrigation with IoT sensors</li>
                     </ul>
 
                     <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-md">
-                        Discover More
+                        Learn More
                     </button>
                 </div>
             </section>
 
             {/* What We Offer Section */}
-            <section className="text-center py-20 bg-[#fffef6]">
-                <p className="text-yellow-500 font-semibold">Our Services</p>
+            <section className="text-center py-20 bg-[#f7fff7]">
+                <p className="text-green-500 font-semibold">Our Services</p>
                 <h2 className="text-3xl font-bold mb-10">What We Offer</h2>
                 <div className="flex flex-wrap justify-center gap-6 px-6">
                     {[
                         {
-                            title: "Agriculture Products",
-                            img: "https://img.freepik.com/free-photo/red-apple-tree_144627-10528.jpg",
+                            title: "Crop Disease Detection",
+                            img: "https://img.freepik.com/free-photo/agronomist-analyzing-plant-diseases-tablet_342744-1190.jpg",
                         },
                         {
-                            title: "Organic Products",
-                            img: "https://img.freepik.com/free-photo/fresh-organic-vegetables_144627-20164.jpg",
+                            title: "Farm Management System",
+                            img: "https://img.freepik.com/free-photo/farmer-using-digital-tablet-farm_342744-1101.jpg",
                         },
                         {
-                            title: "Fresh Vegetables",
-                            img: "https://img.freepik.com/free-photo/close-up-farmer-hands-holding-fresh-vegetables_53876-133966.jpg",
+                            title: "Fertilizer Recommendation",
+                            img: "https://img.freepik.com/free-photo/farmer-holding-fertilizer-field_342744-1215.jpg",
                         },
                         {
-                            title: "Dairy Products",
-                            img: "https://img.freepik.com/free-photo/grapevine-close-up-vineyard_144627-10480.jpg",
+                            title: "Smart Equipment Integration",
+                            img: "https://img.freepik.com/free-photo/tractor-field-agriculture_342744-970.jpg",
                         },
                     ].map((item, index) => (
                         <div key={index} className="relative w-64 rounded-xl overflow-hidden shadow-lg">
@@ -142,7 +138,7 @@ export default function LandingPage() {
 
             {/* Stats Bar Section */}
             <section className="bg-green-600 text-white py-4 flex justify-center gap-10 text-center flex-wrap">
-                {["Agriculture Products", "Projects Completed", "Satisfied Clients", "Experts Farmers"].map(
+                {["Farms Connected", "Sensors Active", "Farmers Trained", "Crops Monitored"].map(
                     (item, index) => (
                         <p key={index} className="font-semibold">
                             {item}
@@ -151,18 +147,18 @@ export default function LandingPage() {
                 )}
             </section>
 
-            {/* Agriculture Matters Section */}
+            {/* Farming Inspiration Section */}
             <section
                 className="relative bg-cover bg-center h-[70vh] flex flex-col justify-center px-10 text-white"
                 style={{
                     backgroundImage:
-                        "url('https://img.freepik.com/free-photo/sapling-growing-ground-with-sunlight_1150-11147.jpg')",
+                        "url('https://img.freepik.com/free-photo/smart-farming-concept-using-digital-technology-monitor-crop-growth_342744-1160.jpg')",
                 }}
             >
                 <div className="bg-black/40 absolute inset-0"></div>
                 <div className="relative z-10 max-w-2xl">
                     <h2 className="text-4xl font-bold mb-4">
-                        Agriculture Matters to the <br /> Future of Development
+                        Farming Smarter for a <br /> Sustainable Future
                     </h2>
                 </div>
                 <div className="relative z-10 mt-4">
@@ -172,27 +168,27 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Explore Projects Section */}
+            {/* Popular Practices Section */}
             <section className="text-center py-20">
-                <p className="text-yellow-500 font-semibold">Recently Completed</p>
-                <h2 className="text-3xl font-bold mb-10">Explore Projects</h2>
+                <p className="text-green-500 font-semibold">Recently Adopted</p>
+                <h2 className="text-3xl font-bold mb-10">Popular Farming Practices</h2>
                 <div className="flex flex-wrap justify-center gap-6 px-6">
                     {[
                         {
-                            title: "Easy Harvesting",
-                            img: "https://img.freepik.com/free-photo/wheat-field-closeup_1150-11113.jpg",
+                            title: "Organic Farming",
+                            img: "https://img.freepik.com/free-photo/organic-farming-fresh-vegetables_342744-1179.jpg",
                         },
                         {
-                            title: "Agriculture Farming",
-                            img: "https://img.freepik.com/free-photo/tractor-working-field_1150-11112.jpg",
+                            title: "Hydroponic Systems",
+                            img: "https://img.freepik.com/free-photo/hydroponic-vegetable-farm_1150-11063.jpg",
                         },
                         {
-                            title: "Ecological Farming",
-                            img: "https://img.freepik.com/free-photo/farmland-with-green-plants_1150-11111.jpg",
+                            title: "Drone Crop Monitoring",
+                            img: "https://img.freepik.com/free-photo/drone-flying-over-field-agriculture_342744-985.jpg",
                         },
                         {
-                            title: "Organic Solutions",
-                            img: "https://img.freepik.com/free-photo/wheat-close-up-hand_1150-11110.jpg",
+                            title: "Sustainable Irrigation",
+                            img: "https://img.freepik.com/free-photo/sprinkler-watering-agriculture-field_342744-1137.jpg",
                         },
                     ].map((item, index) => (
                         <div key={index} className="relative w-64 rounded-xl overflow-hidden shadow-lg">
@@ -210,29 +206,27 @@ export default function LandingPage() {
             </section>
 
             {/* Testimonials Section */}
-            <section className="bg-[#fffef6] py-20 px-10 flex flex-col lg:flex-row items-center justify-center gap-10">
+            <section className="bg-[#f7fff7] py-20 px-10 flex flex-col lg:flex-row items-center justify-center gap-10">
                 <div className="max-w-sm">
-                    <p className="text-yellow-500 font-semibold">Our Testimonials</p>
+                    <p className="text-green-500 font-semibold">Our Testimonials</p>
                     <h2 className="text-3xl font-bold mb-3">
-                        What They’re Talking About Agrios
+                        What Farmers Say About Us
                     </h2>
                     <p className="text-gray-600 mb-4">
-                        There are many variations of passages of available but the majority
-                        have suffered alteration in some form by injected humour or random
-                        words which don't look even.
+                        Thousands of farmers trust Smart Farming to manage their fields
+                        efficiently using technology-driven solutions.
                     </p>
                     <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-md">
-                        View All Testimonials
+                        View All Reviews
                     </button>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-lg p-6 max-w-md">
                     <p className="text-gray-700 mb-4">
-                        There are many variations of passages of available but the majority
-                        have suffered alteration in some form by injected humour or random
-                        word which don't look even.
+                        Smart Farming transformed my productivity. I can now monitor my
+                        crops and irrigation right from my phone!
                     </p>
-                    <p className="font-semibold">Bonnie Tolbert</p>
+                    <p className="font-semibold">Rahim Uddin</p>
                     <p className="text-yellow-400">★★★★★</p>
                 </div>
             </section>

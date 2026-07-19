@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import googleLogo from "../../../public/images/loginimg/google.png";
 import { useLocation, useNavigate } from 'react-router-dom';
-import useAxiosPublic from '../../Hooks/useAxiosPublic';
+// import useAxiosPublic from '../../Hooks/useAxiosPublic';
 import { AuthContext } from '../../Provider/AuthProvider';
 
 const SocialLogin = () => {
@@ -9,7 +9,7 @@ const SocialLogin = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-    const axiosPublic = useAxiosPublic();
+    // const axiosPublic = useAxiosPublic();
 
     const handleGoogleLogin = () => {
         loginWithGoogle()
