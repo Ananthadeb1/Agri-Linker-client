@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Payment = ({ cartItems, totalAmount, userId, onPaymentSuccess, onClose }) => {
@@ -63,7 +64,7 @@ const Payment = ({ cartItems, totalAmount, userId, onPaymentSuccess, onClose }) 
         
         // Validate form before processing
         if (!validateForm()) {
-            alert("Please fix the validation errors before proceeding.");
+            Swal.fire({ icon: 'warning', title: 'Required fields', text: 'Please fix the validation errors before proceeding.' });
             return;
         }
 
@@ -74,7 +75,7 @@ const Payment = ({ cartItems, totalAmount, userId, onPaymentSuccess, onClose }) 
             await new Promise(resolve => setTimeout(resolve, 3000));
 
             // Show payment completion alert
-            alert('✅ Payment Completed Successfully!');
+            Swal.fire({ icon: 'success', title: 'Payment Completed', text: '✅ Payment completed successfully!' });
             
             // Call the success callback with payment data
             onPaymentSuccess({
@@ -85,7 +86,7 @@ const Payment = ({ cartItems, totalAmount, userId, onPaymentSuccess, onClose }) 
             
         } catch (error) {
             console.error("Payment error:", error);
-            alert('❌ Payment failed: ' + (error.response?.data?.message || error.message));
+            Swal.fire({ icon: 'error', title: 'Payment failed', text: error.response?.data?.message || error.message || 'Payment could not be completed.' });
         } finally {
             setProcessing(false);
         }

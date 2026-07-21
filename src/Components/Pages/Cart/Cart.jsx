@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Payment from "./Payment"; // Import the Payment component
@@ -39,12 +40,12 @@ const Cart = () => {
         try {
             const response = await axiosSecure.delete(`/api/cart/remove/${cartItemId}`);
             if (response.data.success) {
-                alert("Item removed from cart!");
+                Swal.fire({ icon: 'success', title: 'Removed', text: 'Item removed from cart!' });
                 fetchCartItems();
             }
         } catch (error) {
             console.error("Error removing item:", error);
-            alert("Failed to remove item from cart");
+            Swal.fire({ icon: 'error', title: 'Remove failed', text: 'Failed to remove item from cart.' });
         }
     };
 
@@ -85,14 +86,14 @@ const Cart = () => {
             }
         } catch (error) {
             console.error("Error processing payment:", error);
-            alert("Failed to process payment. Please try again.");
+            Swal.fire({ icon: 'error', title: 'Payment failed', text: 'Failed to process payment. Please try again.' });
         }
     };
 
     // Modified handleOrderNow to show payment modal
     const handleOrderNow = () => {
         if (cartItems.length === 0) {
-            alert("Your cart is empty!");
+            Swal.fire({ icon: 'warning', title: 'Cart empty', text: 'Your cart is empty!' });
             return;
         }
         setShowPaymentModal(true);
@@ -105,7 +106,7 @@ const Cart = () => {
                 state: { trackingNumber: trackingNumber }
             });
         } else {
-            alert('Please wait while your order is being processed...');
+            Swal.fire({ icon: 'info', title: 'Processing', text: 'Please wait while your order is being processed...' });
         }
     };
 
@@ -123,11 +124,11 @@ const Cart = () => {
         if (trackingNumber) {
             navigator.clipboard.writeText(trackingNumber)
                 .then(() => {
-                    alert('Order ID copied to clipboard!');
+                    Swal.fire({ icon: 'success', title: 'Copied', text: 'Order ID copied to clipboard!' });
                 })
                 .catch(err => {
                     console.error('Failed to copy: ', err);
-                    alert('Failed to copy to clipboard');
+                    Swal.fire({ icon: 'error', title: 'Copy failed', text: 'Failed to copy to clipboard' });
                 });
         }
     };

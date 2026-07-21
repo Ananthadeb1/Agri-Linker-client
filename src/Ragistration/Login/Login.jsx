@@ -1,19 +1,71 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import useAuth from '../../Hooks/useAuth';
 import SocialLogin from '../../Shared/SocialLogin/SocialLogin';
 
 const Login = () => {
-    const { login, setUser } = useAuth();
+    const { login, sendPasswordReset } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [errors, setErrors] = useState({ email: '', password: '', general: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+    const [isResettingPassword, setIsResettingPassword] = useState(false);
+    const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
+    const [forgotPasswordError, setForgotPasswordError] = useState('');
 
     const from = location.state?.from?.pathname || "/";
+
+    const handleForgotPassword = async event => {
+        event.preventDefault();
+        const email = forgotPasswordEmail.trim();
+
+        if (!email) {
+            setForgotPasswordError('Please enter your email address');
+            return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setForgotPasswordError('Please enter a valid email address');
+            return;
+        }
+
+        setIsResettingPassword(true);
+        setForgotPasswordError('');
+        setForgotPasswordMessage('');
+
+        try {
+            await sendPasswordReset(email);
+            setForgotPasswordEmail('');
+            setForgotPasswordMessage('Password reset link sent successfully. Please check your email inbox.');
+            Swal.fire({
+                icon: 'success',
+                title: 'Reset link sent',
+                text: 'Please follow the link in your email to reset your password.',
+                confirmButtonColor: '#4BAF47'
+            });
+        } catch (error) {
+            console.error('Password reset failed:', error);
+            const message = error.code === 'auth/user-not-found'
+                ? 'No account exists for this email address.'
+                : 'Unable to send reset link right now. Please try again later.';
+            setForgotPasswordError(message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Reset failed',
+                text: message,
+                confirmButtonColor: '#4BAF47'
+            });
+        } finally {
+            setIsResettingPassword(false);
+        }
+    };
 
     const handleLogin = async event => {
         event.preventDefault();
@@ -45,9 +97,7 @@ const Login = () => {
         setErrors({ email: '', password: '', general: '' });
 
         try {
-            const result = await login(email, password);
-            const user = result.user;
-            setUser(user);
+            await login(email, password);
             navigate(from, { replace: true });
         } catch (error) {
             console.error("Login failed:", error);
@@ -127,10 +177,63 @@ const Login = () => {
 
                         {/* Forgot Password */}
                         <div className="text-right">
-                            <a className="text-[#4BAF47] hover:text-[#3A8E36] transition-colors font-semibold text-lg cursor-pointer">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowForgotPassword((prev) => !prev);
+                                    setForgotPasswordError('');
+                                    setForgotPasswordMessage('');
+                                }}
+                                className="text-[#4BAF47] hover:text-[#3A8E36] transition-colors font-semibold text-lg cursor-pointer"
+                            >
                                 Forgot your password?
-                            </a>
+                            </button>
                         </div>
+
+                        {showForgotPassword && (
+                            <form onSubmit={handleForgotPassword} className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700">Enter your email to receive a reset link</label>
+                                <input
+                                    type="email"
+                                    value={forgotPasswordEmail}
+                                    onChange={(e) => {
+                                        setForgotPasswordEmail(e.target.value);
+                                        if (forgotPasswordError) {
+                                            setForgotPasswordError('');
+                                        }
+                                    }}
+                                    placeholder="you@example.com"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4BAF47] focus:border-[#4BAF47] transition"
+                                />
+                                {forgotPasswordError && (
+                                    <p className="text-sm text-red-600">{forgotPasswordError}</p>
+                                )}
+                                {forgotPasswordMessage && (
+                                    <p className="text-sm text-green-600">{forgotPasswordMessage}</p>
+                                )}
+                                <div className="flex items-center justify-end gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowForgotPassword(false);
+                                            setForgotPasswordEmail('');
+                                            setForgotPasswordError('');
+                                            setForgotPasswordMessage('');
+                                        }}
+                                        className="text-sm font-medium text-gray-600 hover:text-gray-800"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isResettingPassword}
+                                        className="px-4 py-2 rounded-lg bg-[#4BAF47] text-white font-semibold hover:bg-[#3A8E36] disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                    >
+                                        {isResettingPassword ? 'Sending...' : 'Send Reset Link'}
+                                    </button>
+                                </div>
+                            </form>
+                        )}
 
                         {/* Submit Button */}
                         <div>

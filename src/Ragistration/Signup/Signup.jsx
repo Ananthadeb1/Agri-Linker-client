@@ -16,6 +16,28 @@ const Signup = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const completeSignup = async (name, email, role, password) => {
+        const result = await createUser(email, password);
+        await updateUserProfile({ name });
+
+        const userInfo = {
+            uid: result.user.uid,
+            name: name,
+            email: email,
+            role: role,
+            createdAt: new Date()
+        };
+
+        const res = await axiosPublic.post("/users", userInfo);
+        if (res.data.insertedId || res.data.message === "User already exists") {
+            await fetchUserData(email);
+            navigate("/");
+            return { success: true };
+        }
+
+        return { success: false, response: res.data };
+    };
+
     const handleSignup = async (event) => {
         event.preventDefault();
         const form = event.target;
@@ -48,30 +70,30 @@ const Signup = () => {
         setIsLoading(true);
 
         try {
-            const result = await createUser(email, password1);
-            await updateUserProfile({ name });
-
-            console.log("User profile updated successfully");
-            const userInfo = {
-                uid: result.user.uid,
-                name: name,
-                email: email,
-                role: role,
-                createdAt: new Date()
-            }
-
-            const res = await axiosPublic.post("/users", userInfo);
-            if (res.data.insertedId || res.data.message === "User already exists") {
-                console.log("User info saved to database:", res.data);
-                await fetchUserData(email);
-                navigate("/");
-            } else {
-                console.log("User info not saved to database:", res.data);
+            const signupResult = await completeSignup(name, email, role, password1);
+            if (!signupResult.success) {
+                console.log("User info not saved to database:", signupResult.response);
             }
         } catch (error) {
             console.error("Error:", error);
             if (error.code === "auth/email-already-in-use") {
-                setError("email", { type: "manual", message: "Email is already in use. Please use a different email." });
+                try {
+                    const cleanupResponse = await axiosPublic.post("/users/cleanup-firebase-account", { email });
+                    if (cleanupResponse.data?.success || cleanupResponse.data?.skipped) {
+                        const retryResult = await completeSignup(name, email, role, password1);
+                        if (!retryResult.success) {
+                            console.log("User info not saved to database after cleanup:", retryResult.response);
+                        }
+                        return;
+                    }
+                } catch (cleanupError) {
+                    console.error("Firebase cleanup failed:", cleanupError);
+                }
+
+                setError("email", {
+                    type: "manual",
+                    message: "This email is already registered in Firebase. If you recently deleted your account, the cleanup step failed. Please try again in a moment or contact support."
+                });
             } else if (error.code === "auth/invalid-email") {
                 setError("email", { type: "manual", message: "Invalid email format. Please enter a valid email." });
             } else if (error.code === "auth/weak-password") {

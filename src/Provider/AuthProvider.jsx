@@ -10,6 +10,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     updateProfile,
+    sendPasswordResetEmail,
 } from "firebase/auth";
 import { app } from "../Firebase/firebase.config";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
@@ -88,6 +89,21 @@ const AuthProvider = ({ children }) => {
             return userCredential;
         } catch (error) {
             throw error; // Re-throw error for handling in component
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const sendPasswordReset = async (email) => {
+        setLoading(true);
+        try {
+            await sendPasswordResetEmail(auth, email, {
+                url: `${window.location.origin}/login`,
+                handleCodeInApp: true,
+            });
+            return true;
+        } catch (error) {
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -220,9 +236,11 @@ const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
         createUser,
         login,
+        sendPasswordReset,
         loginWithGoogle,
         logout,
         updateUserProfile,
+        fetchUserData,
         refreshUser,
         axiosSecure
     };
