@@ -10,7 +10,7 @@ const LoanManagement = () => {
     const { data: loans = [], isLoading, refetch } = useQuery({
         queryKey: ['loan-applications'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/api/loans/all');
+            const res = await axiosSecure.get('/api/admin/loans/all');
             return res.data;
         }
     });

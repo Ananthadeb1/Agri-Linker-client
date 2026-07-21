@@ -10,7 +10,7 @@ import SocialLogin from "../../Shared/SocialLogin/SocialLogin";
 const Signup = () => {
     const axiosPublic = useAxiosPublic();
     const { register, setError, formState: { errors }, } = useForm();
-    const { createUser, updateUserProfile } = useAuth();
+    const { createUser, updateUserProfile, fetchUserData } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -49,7 +49,7 @@ const Signup = () => {
 
         try {
             const result = await createUser(email, password1);
-            await updateUserProfile(name, "");
+            await updateUserProfile({ name });
 
             console.log("User profile updated successfully");
             const userInfo = {
@@ -61,8 +61,9 @@ const Signup = () => {
             }
 
             const res = await axiosPublic.post("/users", userInfo);
-            if (res.data.insertedId) {
+            if (res.data.insertedId || res.data.message === "User already exists") {
                 console.log("User info saved to database:", res.data);
+                await fetchUserData(email);
                 navigate("/");
             } else {
                 console.log("User info not saved to database:", res.data);

@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/admin-dashboard",
-                element: <PrivateRoute><Dashboard /></PrivateRoute>,
+                element: <PrivateRoute allowedRoles={["admin"]}><Dashboard /></PrivateRoute>,
             },
             {
                 path: "/login",
@@ -53,15 +53,15 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/add-product',
-                element: <PrivateRoute><AddProduct /></PrivateRoute>
+                element: <PrivateRoute allowedRoles={["farmer"]}><AddProduct /></PrivateRoute>
             },
             {
                 path: "/cart",
-                element: <PrivateRoute><Cart /></PrivateRoute>,
+                element: <PrivateRoute allowedRoles={["buyer"]}><Cart /></PrivateRoute>,
             },
             {
                 path: "/rating-review",
-                element: <RatingReview />,
+                element: <PrivateRoute allowedRoles={["buyer"]}><RatingReview /></PrivateRoute>,
             },
             {
                 path: '/userProfile',
@@ -69,23 +69,23 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/loan-request",
-                element: <PrivateRoute><LoanRequest /></PrivateRoute>
+                element: <PrivateRoute allowedRoles={["farmer"]}><LoanRequest /></PrivateRoute>
             },
             {
-                path: "/invest",            // <-- Add this new route
-                element: <PrivateRoute><InvestPage /></PrivateRoute>
+                path: "/invest",
+                element: <PrivateRoute allowedRoles={["buyer"]}><InvestPage /></PrivateRoute>
             },
             {
                 path: "/track-order",
-                element: <PrivateRoute><OrderTracking /></PrivateRoute> // Protect with login!
+                element: <PrivateRoute allowedRoles={["buyer"]}><OrderTracking /></PrivateRoute>
             },
             {
                 path: "/crop-recommendation",
-                element: <PrivateRoute><CropRecommendation /></PrivateRoute>,
+                element: <PrivateRoute allowedRoles={["farmer"]}><CropRecommendation /></PrivateRoute>,
             },
             {
                 path: "/my-products",
-                element: <PrivateRoute><MyProducts /></PrivateRoute>,
+                element: <PrivateRoute allowedRoles={["farmer"]}><MyProducts /></PrivateRoute>,
             }
         ],
     },

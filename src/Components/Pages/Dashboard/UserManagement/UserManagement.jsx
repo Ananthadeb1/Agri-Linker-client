@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import { FiUser, FiMail, FiCalendar, FiShield, FiTrash2, FiEdit } from "react-icons/fi";
+import { FiUser, FiMail, FiShield, FiTrash2 } from "react-icons/fi";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { Tooltip } from "@mui/material";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
+import useAuth from "../../../../Hooks/useAuth";
 
 const UserManagement = () => {
     const axiosSecure = useAxiosSecure();
+    const { user: currentUser } = useAuth();
     const { data: users = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -15,53 +17,69 @@ const UserManagement = () => {
         }
     });
 
+    const canEditUser = (targetUser) => {
+        if (!currentUser) return false;
+        if (targetUser.role === 'superadmin') return false;
+        if (currentUser.role === 'superadmin') return true;
+        if (currentUser.role === 'admin') {
+            return targetUser.role !== 'admin';
+        }
+        return false;
+    };
 
+    const canDeleteUser = (targetUser) => {
+        if (!currentUser) return false;
+        if (targetUser.role === 'superadmin') return false;
+        if (currentUser.role === 'superadmin') return true;
+        if (currentUser.role === 'admin') {
+            return targetUser.role !== 'admin';
+        }
+        return false;
+    };
 
-    const handleMakeAdmin = (user) => {
-        Swal.fire({
-            title: 'Confirm Admin Promotion',
-            text: `Are you sure you want to make ${user.name} an admin?`,
+    const roleOptions = [
+        { value: 'buyer', label: 'Buyer' },
+        { value: 'farmer', label: 'Farmer' },
+        { value: 'admin', label: 'Admin' },
+    ];
+
+    const handleChangeRole = async (user, newRole) => {
+        if (user.role === newRole) return;
+
+        const result = await Swal.fire({
+            title: `Change ${user.name}'s role to ${newRole}?`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#4f46e5',
+            confirmButtonText: 'Yes, change role',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#4BAF47',
             cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Yes, promote!',   // ✅ confirm button text
-            cancelButtonText: 'Cancel',           // ✅ cancel button text
-            buttonsStyling: true                  // ✅ keep Swal default styling (prevents Tailwind override)
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axiosSecure.patch(`/users/admin/${user._id}`)
-                    .then(res => {
-                        if (res.data.modifiedCount > 0) {
-                            refetch();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Promotion Successful!',
-                                text: `${user.name} is now an admin.`,
-                                timer: 2000,
-                                showConfirmButton: false,
-                                background: '#f9fafb',
-                                backdrop: `
-                            rgba(79, 70, 229, 0.1)
-                            url("/images/confetti.gif")
-                            center top
-                            no-repeat
-                        `
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Promotion Failed',
-                            text: error.message,
-                            background: '#f9fafb'
-                        });
-                    });
-            }
         });
 
-    }
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        try {
+            const res = await axiosSecure.patch(`/users/admin/${user._id}`, { role: newRole });
+            if (res.data.modifiedCount > 0) {
+                refetch();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Role updated',
+                    text: `${user.name} is now a ${newRole}.`,
+                    timer: 1800,
+                    showConfirmButton: false,
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: error.response?.data?.message || error.message || 'Could not update role.',
+            });
+        }
+    };
 
     const handleDeleteUser = (user) => {
         Swal.fire({
@@ -99,13 +117,16 @@ const UserManagement = () => {
                         Swal.fire({
                             icon: 'error',
                             title: 'Deletion Failed',
-                            text: error.message,
+                            text: error.response?.data?.message || error.message,
                             background: '#f9fafb'
                         });
                     });
             }
         });
     }
+
+
+
 
     if (isLoading) {
         return (
@@ -180,32 +201,43 @@ const UserManagement = () => {
                                     <div className="text-sm text-gray-500">{user.phone || 'No phone provided'}</div>
                                 </td>
                                 <td className="px-8 py-5 whitespace-nowrap">
-                                    {user.role === 'admin' ? (
+                                    {user.role === 'superadmin' ? (
+                                        <span className="px-3 py-1.5 inline-flex items-center text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            <MdAdminPanelSettings className="mr-2" size={16} />
+                                            Super Admin
+                                        </span>
+                                    ) : !canEditUser(user) ? (
                                         <span className="px-3 py-1.5 inline-flex items-center text-sm leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
                                             <MdAdminPanelSettings className="mr-2" size={16} />
-                                            Admin
+                                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                                         </span>
                                     ) : (
-                                        <Tooltip title="Promote to admin" arrow>
-                                            <button
-                                                onClick={() => handleMakeAdmin(user)}
-                                                className="px-4 py-2.5 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors flex items-center text-sm font-medium"
-                                            >
-                                                <FiEdit className="mr-2" size={16} />
-                                                Make Admin
-                                            </button>
-                                        </Tooltip>
+                                        <select
+                                            value={user.role}
+                                            onChange={(e) => handleChangeRole(user, e.target.value)}
+                                            className="border border-gray-300 bg-white text-gray-800 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4BAF47] transition"
+                                        >
+                                            {roleOptions.map((option) => (
+                                                <option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
                                     )}
                                 </td>
                                 <td className="px-8 py-5 whitespace-nowrap text-right text-sm font-medium">
-                                    <Tooltip title="Delete user" arrow>
-                                        <button
-                                            onClick={() => handleDeleteUser(user)}
-                                            className="text-red-600 hover:text-red-800 p-3 rounded-lg hover:bg-red-50 transition-colors"
-                                        >
-                                            <FiTrash2 size={18} />
-                                        </button>
-                                    </Tooltip>
+                                    {canDeleteUser(user) ? (
+                                        <Tooltip title="Delete user" arrow>
+                                            <button
+                                                onClick={() => handleDeleteUser(user)}
+                                                className="text-red-600 hover:text-red-800 p-3 rounded-lg hover:bg-red-50 transition-colors"
+                                            >
+                                                <FiTrash2 size={18} />
+                                            </button>
+                                        </Tooltip>
+                                    ) : (
+                                        <div className="text-sm text-gray-400">No actions</div>
+                                    )}
                                 </td>
                             </tr>
                         ))}

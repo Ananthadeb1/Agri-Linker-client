@@ -9,11 +9,12 @@ import Swal from 'sweetalert2';
 import { PencilIcon, CheckIcon, XMarkIcon, IdentificationIcon } from '@heroicons/react/24/outline';
 
 const ProfileInfo = () => {
-    const { user, updateUserProfile } = useAuth();
+    const { user, updateUserProfile, refreshUser } = useAuth();
     const axiosSecure = useAxiosSecure();
     
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingRole, setLoadingRole] = useState(false);
     const [formData, setFormData] = useState({
         displayName: '',
         email: '',
@@ -131,6 +132,37 @@ const handleSave = async () => {
         });
     } finally {
         setLoading(false);
+    }
+};
+
+const handleUpgradeToFarmer = async () => {
+    if (user?.role !== 'buyer') return;
+
+    setLoadingRole(true);
+    try {
+        const response = await axiosSecure.patch(`/users/${user.email}`, {
+            role: 'farmer'
+        });
+
+        if (response.data.success) {
+            await refreshUser();
+            Swal.fire({
+                icon: 'success',
+                title: 'Role Updated',
+                text: 'Your account now has farmer access.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    } catch (error) {
+        console.error('Error upgrading role:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Upgrade Failed',
+            text: error.response?.data?.message || 'Could not change your role now. Please try again later.',
+        });
+    } finally {
+        setLoadingRole(false);
     }
 };
     const handleCancel = () => {
@@ -311,6 +343,22 @@ const handleSave = async () => {
                                 </div>
                             </div>
                         </div>
+
+                        {user?.role === 'buyer' && (
+                            <div className="mt-6 p-5 bg-emerald-50 border border-emerald-100 rounded-xl">
+                                <h4 className="text-base font-semibold text-emerald-800 mb-2">Switch to Farmer</h4>
+                                <p className="text-sm text-emerald-700 mb-4">
+                                    Want to sell your own crops? Change your account from buyer to farmer to start adding products and managing loan requests.
+                                </p>
+                                <button
+                                    onClick={handleUpgradeToFarmer}
+                                    disabled={loadingRole}
+                                    className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#4BAF47] text-white font-medium hover:bg-[#3A8E36] transition-colors disabled:opacity-50"
+                                >
+                                    {loadingRole ? 'Updating role...' : 'Upgrade to Farmer'}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 

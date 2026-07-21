@@ -102,10 +102,12 @@ const AuthProvider = ({ children }) => {
                 uid: loggedUser.uid,
                 name: loggedUser.displayName,
                 email: loggedUser.email,
-                image: loggedUser.photoURL
+                photoURL: loggedUser.photoURL,
+                role: 'buyer',
+                createdAt: new Date()
             };
             await axiosPublic.post("/users", userInfo);
-            // User will be set automatically via onAuthStateChanged
+            await fetchUserData(loggedUser.email);
             return result;
         } catch (error) {
             throw error; // Re-throw error for handling in component
@@ -141,36 +143,49 @@ const AuthProvider = ({ children }) => {
     };
 
     // ✅ Fetch and merge user data
-    const fetchUserData = async (email) => {
+    const fetchUserData = async (email, retries = 3, delayMs = 500) => {
         try {
             const tokenResponse = await axiosPublic.post('/jwt', { email });
-            if (tokenResponse.data.token) {
-                localStorage.setItem('access-token', tokenResponse.data.token);
+            if (!tokenResponse.data.token) {
+                throw new Error('Failed to obtain JWT token');
+            }
 
-                // Fetch MongoDB user data
-                const userResponse = await axiosSecure.get(`/users/${email}`);
-                const mongoUser = userResponse.data;
+            localStorage.setItem('access-token', tokenResponse.data.token);
 
-                // Get current Firebase user
-                const firebaseUser = auth.currentUser;
+            // Fetch MongoDB user data
+            const userResponse = await axiosSecure.get(`/users/${email}`);
+            const mongoUser = userResponse.data || null;
 
-                // ✅ Merge data: MongoDB data has priority
+            if (!mongoUser && retries > 0) {
+                // Retry once if the user record is not yet available in MongoDB
+                await new Promise((resolve) => setTimeout(resolve, delayMs));
+                return fetchUserData(email, retries - 1, delayMs);
+            }
+
+            const firebaseUser = auth.currentUser;
+            if (!firebaseUser) {
+                throw new Error('Firebase user not available');
+            }
+
+            if (mongoUser) {
                 const mergedUser = {
-                    ...firebaseUser, // Firebase base data
-                    ...mongoUser,    // MongoDB extended data
-                    // Ensure we use the latest data
+                    ...firebaseUser,
+                    ...mongoUser,
                     displayName: mongoUser?.name || firebaseUser?.displayName,
                     photoURL: mongoUser?.photoURL || firebaseUser?.photoURL,
                     email: mongoUser?.email || firebaseUser?.email,
                     uid: mongoUser?.uid || firebaseUser?.uid
                 };
-
                 setUser(mergedUser);
+                return mergedUser;
             }
+
+            setUser(firebaseUser);
+            return firebaseUser;
         } catch (error) {
             console.error("Failed to fetch user data:", error);
-            // Fallback to Firebase user if MongoDB fails
             setUser(auth.currentUser);
+            return auth.currentUser;
         }
     };
 
