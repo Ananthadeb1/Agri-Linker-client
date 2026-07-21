@@ -2,3 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 @plugin "daisyui";
+
+@layer base {
+  input,
+  select,
+  textarea {
+    @apply bg-gray-200 text-gray-900 border border-gray-300 rounded-lg focus:outline-none transition;
+    box-sizing: border-box;
+    background-color: #e5e7eb;
+    color: #111827;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply ring-2 ring-green-500 outline-none;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-500;
+  }
+
+  select {
+    accent-color: #22c55e;
+  }
+}

@@ -281,7 +281,7 @@ const Products = () => {
                                                 {selectedProductReviews.averageRating.toFixed(1)}
                                             </span>
                                             <span className="text-gray-600">
-                                                ({selectedProductReviews.reviewss.length} reviews)
+                                                ({selectedProductReviews.reviews.length} reviews)
                                             </span>
                                         </div>
                                     </div>
