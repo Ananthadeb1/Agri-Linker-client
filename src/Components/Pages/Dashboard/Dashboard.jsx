@@ -3,7 +3,6 @@ import {
     faBars, faTimes, faUsers, faHotel, 
     faBox, faShoppingCart, faUserCheck, 
     faHandHoldingUsd, faChartLine, faChartBar,
-    faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserManagement from './UserManagement/UserManagement';
