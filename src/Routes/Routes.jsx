@@ -24,7 +24,8 @@ import MyProducts from "../Components/Pages/MyProducts/MyProducts";
 
 
 
-import { Rating } from "@mui/material";
+import ForgotPassword from "../Ragistration/ForgotPassword/ForgotPassword";
+import ResetPassword from "../Ragistration/ResetPassword/ResetPassword";
 
 export const router = createBrowserRouter([
     {
@@ -50,6 +51,14 @@ export const router = createBrowserRouter([
             {
                 path: "/signup",
                 element: <Signup />,
+            },
+            {
+                path: "/forgot-password",
+                element: <ForgotPassword />,
+            },
+            {
+                path: "/reset-password",
+                element: <ResetPassword />,
             },
             {
                 path: '/add-product',

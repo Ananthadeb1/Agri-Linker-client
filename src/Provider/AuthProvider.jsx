@@ -11,6 +11,8 @@ import {
     GoogleAuthProvider,
     updateProfile,
     sendPasswordResetEmail,
+    verifyPasswordResetCode,
+    confirmPasswordReset,
 } from "firebase/auth";
 import { app } from "../Firebase/firebase.config";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
@@ -98,7 +100,7 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             await sendPasswordResetEmail(auth, email, {
-                url: `${window.location.origin}/login`,
+                url: `${window.location.origin}/reset-password`,
                 handleCodeInApp: true,
             });
             return true;
@@ -107,6 +109,14 @@ const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const verifyResetCode = async (oobCode) => {
+        return await verifyPasswordResetCode(auth, oobCode);
+    };
+
+    const confirmResetPassword = async (oobCode, newPassword) => {
+        return await confirmPasswordReset(auth, oobCode, newPassword);
     };
 
     const loginWithGoogle = async () => {
@@ -237,6 +247,8 @@ const AuthProvider = ({ children }) => {
         createUser,
         login,
         sendPasswordReset,
+        verifyResetCode,
+        confirmResetPassword,
         loginWithGoogle,
         logout,
         updateUserProfile,

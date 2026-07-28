@@ -17,10 +17,12 @@ const UserManagement = () => {
         }
     });
 
+    const SUPER_ADMIN_EMAIL = 'ananthadebnath103@gmail.com';
+
     const canEditUser = (targetUser) => {
         if (!currentUser) return false;
-        if (targetUser.role === 'superadmin') return false;
-        if (currentUser.role === 'superadmin') return true;
+        if (targetUser.role === 'superadmin' || targetUser.email === SUPER_ADMIN_EMAIL) return false;
+        if (currentUser.role === 'superadmin' || currentUser.email === SUPER_ADMIN_EMAIL) return true;
         if (currentUser.role === 'admin') {
             return targetUser.role !== 'admin';
         }
@@ -29,8 +31,8 @@ const UserManagement = () => {
 
     const canDeleteUser = (targetUser) => {
         if (!currentUser) return false;
-        if (targetUser.role === 'superadmin') return false;
-        if (currentUser.role === 'superadmin') return true;
+        if (targetUser.role === 'superadmin' || targetUser.email === SUPER_ADMIN_EMAIL) return false;
+        if (currentUser.role === 'superadmin' || currentUser.email === SUPER_ADMIN_EMAIL) return true;
         if (currentUser.role === 'admin') {
             return targetUser.role !== 'admin';
         }
@@ -84,29 +86,23 @@ const UserManagement = () => {
     const handleDeleteUser = (user) => {
         Swal.fire({
             title: 'Confirm User Deletion',
-            text: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+            text: `Are you sure you want to delete ${user.name}? This will remove the user from both the database and Firebase.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
             cancelButtonColor: '#6b7280',
             confirmButtonText: 'Yes, delete!',
             background: '#f9fafb',
-            backdrop: `
-                rgba(239, 68, 68, 0.15)
-                url("/images/trash-icon.gif")
-                center top
-                no-repeat
-            `
         }).then((result) => {
             if (result.isConfirmed) {
                 axiosSecure.delete(`/users/${user._id}`)
                     .then(res => {
-                        if (res.data.deletedCount > 0) {
+                        if (res.data.deletedCount > 0 || res.data.success) {
                             refetch();
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Deleted!',
-                                text: `${user.name} has been removed.`,
+                                text: `${user.name} has been removed from database and Firebase.`,
                                 timer: 2000,
                                 showConfirmButton: false,
                                 background: '#f9fafb'
