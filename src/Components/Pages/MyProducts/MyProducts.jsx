@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { getImageUrl } from '../../../utils/getImageUrl';
 
 const MyProducts = () => {
     const { user } = useAuth();
@@ -149,7 +150,7 @@ const MyProducts = () => {
                                             <div className="flex items-center">
                                                 <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-lg overflow-hidden">
                                                     <img
-                                                        src={`http://localhost:5000${product.image}`}
+                                                        src={getImageUrl(product.image)}
                                                         alt={product.name}
                                                         className="h-full w-full object-cover"
                                                         onError={(e) => {
@@ -195,7 +196,7 @@ const MyProducts = () => {
                                     <div className="flex items-start space-x-3">
                                         <div className="flex-shrink-0 h-12 w-12 bg-gray-100 rounded-lg overflow-hidden">
                                             <img
-                                                src={`http://localhost:5000${product.image}`}
+                                                src={getImageUrl(product.image)}
                                                 alt={product.name}
                                                 className="h-full w-full object-cover"
                                                 onError={(e) => {

@@ -5,6 +5,7 @@ import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import Swal from 'sweetalert2';
+import { getImageUrl } from '../../../utils/getImageUrl';
 
 const RatingReview = () => {
     const { user } = useAuth();
@@ -419,7 +420,7 @@ const RatingReview = () => {
                                 <div className="flex-shrink-0">
                                     {review.image ? (
                                         <img 
-                                            src={`http://localhost:5000${review.image}`} 
+                                            src={getImageUrl(review.image)} 
                                             alt={review.productName || 'Product image'}
                                             className="w-24 h-24 object-cover rounded-2xl"
                                             onError={(e) => {
@@ -523,7 +524,7 @@ const RatingReview = () => {
                                 <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
                                     {review.image ? (
                                         <img
-                                            src={`http://localhost:5000${review.image}`}
+                                            src={getImageUrl(review.image)}
                                             alt={review.productName || 'Product image'}
                                             className="w-full h-full object-cover rounded-2xl"
                                             onError={(e) => {

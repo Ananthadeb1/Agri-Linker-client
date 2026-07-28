@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import useAuth from '../../../Hooks/useAuth'; // <-- Corrected import path
+import useAuth from '../../../Hooks/useAuth';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const LoanRequest = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const [amount, setAmount] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -23,7 +24,7 @@ const LoanRequest = () => {
     const farmerId = user._id || user.uid;
 
     try {
-      await axios.post('http://localhost:5000/api/loans', {
+      await axiosSecure.post('/api/loans', {
         farmerId,
         amount,
         purpose,

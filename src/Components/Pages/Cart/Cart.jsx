@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Payment from "./Payment"; // Import the Payment component
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 const Cart = () => {
     const { user } = useAuth();
@@ -191,7 +192,7 @@ const Cart = () => {
                                     <div className="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
                                         {item.image && (
                                             <img
-                                                src={`http://localhost:5000${item.image}`}
+                                                src={getImageUrl(item.image)}
                                                 alt={item.productName}
                                                 className="w-full h-20 object-cover"
                                                 onError={(e) => {

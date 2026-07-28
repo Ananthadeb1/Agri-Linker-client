@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import { FiPackage, FiEdit, FiTrash2, FiUser, FiDollarSign } from "react-icons/fi";
 import Swal from "sweetalert2";
+import { getImageUrl } from "../../../../utils/getImageUrl";
 
 const ProductManagement = () => {
     const axiosSecure = useAxiosSecure();
@@ -127,7 +128,7 @@ const ProductManagement = () => {
                                             <div className="h-10 w-10 flex-shrink-0">
                                                 <img
                                                     className="h-10 w-10 rounded-lg object-cover"
-                                                    src={`http://localhost:5000${product.image}`}
+                                                    src={getImageUrl(product.image)}
                                                     alt={product.name}
                                                 />
                                             </div>

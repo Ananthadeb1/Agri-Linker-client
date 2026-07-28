@@ -1,10 +1,9 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import useAuth from '../../../Hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { FiPackage, FiTruck, FiCheckCircle, FiClock } from 'react-icons/fi';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+import { getImageUrl } from '../../../utils/getImageUrl';
 
 const OrderTracking = () => {
     const { user } = useAuth();
@@ -186,7 +185,7 @@ const OrderTracking = () => {
                                                             <div key={index} className="flex items-center gap-3 rounded-lg border border-gray-200 p-3">
                                                                 {item.image && (
                                                                     <img
-                                                                        src={`${API_BASE_URL}${item.image}`}
+                                                                        src={getImageUrl(item.image)}
                                                                         alt={item.productName}
                                                                         className="w-16 h-16 object-cover rounded-lg"
                                                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/64x64?text=No+Image'; }}

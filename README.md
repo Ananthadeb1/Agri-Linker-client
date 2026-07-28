@@ -109,5 +109,5 @@ npm run dev
 ## Deployment Notes
 - Ensure `ACCESS_TOKEN_SECRET` and `SUPER_ADMIN_EMAIL` are configured in the server `.env`
 - Use a hosted MongoDB instance for production
-- Update the frontend base API URL from `http://localhost:5000` to the deployed backend URL
+- Update the frontend base API URL from `http://https://agri-linker-server.onrender.com/` to the deployed backend URL
 - Review CORS settings and secure file uploads before deployment

@@ -1,10 +1,9 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Payment from "../Cart/Payment";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 // Reusable unicode icons (kept as escape sequences so the file never breaks
 // due to editor / OS encoding issues, which was the root cause of the
@@ -463,7 +462,7 @@ const Products = () => {
                                 >
                                     <div className="h-48 bg-gray-100 relative">
                                         <img
-                                            src={`${API_BASE_URL}${product.image ? product.image : '/img'}`}
+                                            src={getImageUrl(product.image)}
                                             alt={product.name}
                                             className="w-full h-full object-cover"
                                             onError={(e) => {
@@ -629,7 +628,7 @@ const Products = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="rounded-lg overflow-hidden bg-gray-50">
                                     <img
-                                        src={`${API_BASE_URL}${selectedBuyNowProduct.image}`}
+                                        src={getImageUrl(selectedBuyNowProduct.image)}
                                         alt={selectedBuyNowProduct.name}
                                         className="w-full h-48 object-cover"
                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/300x200?text=No+Image'; }}
