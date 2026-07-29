@@ -33,3 +33,8 @@ Build for production:
 ```bash
 npm run build
 ```
+## Links
+live link: https://hilarious-biscuit-d1a0c5.netlify.app/
+Client-Side Code: https://github.com/Ananthadeb1/Agri-Linker-client/
+Server-Side Code: https://github.com/Ananthadeb1/Agri-Linker-Server
+
